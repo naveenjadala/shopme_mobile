@@ -1,0 +1,118 @@
+import {useNavigation} from '@react-navigation/native';
+import React, {memo, useState} from 'react';
+import {Dimensions, FlatList, TouchableOpacity} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import styled from 'styled-components/native';
+
+import Header from '../../../components/Headers/Header';
+import {useGetFavoritesQuery} from '../favoritesApi';
+import {ItemProps} from '../types';
+
+const {width} = Dimensions.get('screen');
+
+const ProductItem = memo(({item, goToDetails}: ItemProps) => {
+  const [isFav, setIsFav] = useState(false);
+  const toggleFav = () => setIsFav(!isFav);
+  return (
+    <CardTouchable onPress={() => goToDetails(item.id)}>
+      <ProductCard>
+        <ImageWrapper>
+          <ProductImage source={{uri: item.images[0]}} resizeMode="cover" />
+          <FavIcon onPress={toggleFav}>
+            <Icon
+              name={isFav ? 'heart' : 'heart-outline'}
+              size={20}
+              color={isFav ? 'black' : 'gray'}
+            />
+          </FavIcon>
+        </ImageWrapper>
+        <ProductInfo>
+          <ProductTitle numberOfLines={1}>{item.title}</ProductTitle>
+        </ProductInfo>
+      </ProductCard>
+    </CardTouchable>
+  );
+});
+
+/**
+ * Favorites component renders a list of favorite products.
+ *
+ * It fetches the favorite products data using the useGetFavoritesQuery hook
+ * and displays them in a grid view. Each product item is clickable and
+ * navigates to the ProductDetails screen.
+ *
+ * @returns JSX.Element
+ */
+
+const Favorites = () => {
+  const navigation = useNavigation();
+  const {data: favData, isLoading} = useGetFavoritesQuery();
+
+  const goToDetails = (id: number) => {
+    navigation.navigate('ProductDetails', {id: id});
+  };
+
+  return (
+    <Container>
+      <Header title="Favorites" isBackButton={false} />
+      <FlatList
+        data={favData}
+        keyExtractor={item => item.id.toString()}
+        contentContainerStyle={{paddingBottom: 50}}
+        renderItem={({item, index}) => (
+          <ProductItem item={item} key={index} goToDetails={goToDetails} />
+        )}
+        numColumns={2}
+        showsVerticalScrollIndicator={false}
+      />
+    </Container>
+  );
+};
+
+export default Favorites;
+
+const Container = styled.View`
+  flex: 1;
+  background-color: #fff;
+`;
+
+const CardTouchable = styled(TouchableOpacity)`
+  flex: 1;
+`;
+
+const ProductCard = styled.View`
+  width: ${width / 2 - 4}px;
+  overflow: hidden;
+`;
+
+const ProductImage = styled.Image`
+  width: 100%;
+  height: 200px;
+`;
+
+const ProductInfo = styled.View`
+  padding: 10px;
+`;
+
+const ProductTitle = styled.Text`
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #111;
+`;
+
+const ImageWrapper = styled.View`
+  width: ${width / 2}px;
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+`;
+
+const FavIcon = styled.TouchableOpacity`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: white;
+  padding: 3px;
+  border-radius: 20px;
+`;
