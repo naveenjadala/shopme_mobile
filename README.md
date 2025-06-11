@@ -8,41 +8,43 @@ A modern React Native e-commerce mobile app built with TypeScript. This app show
 
 Here's a simplified view of the folder structure inside the `src/` directory:
 
+```bash
 |-- android
 ├── 📁 ios
 |-- src/
-| |-- assets/ # Images, fonts, icons, etc.
-| |
-| |-- components/ # Shared, reusable UI components
-| | |-- Button/ # "Button" UI component
-| | | |-- Button.tsx
-| | | |-- Board.test.ts
-| | | |-- types.ts
-| | |
-| | |-- ... # Other shared components
-| |
-| |-- features/ # App screens
-| | |-- Home/ # Home screen module
-| | | |-- components/ # Components only used in Home feature
-| | | |-- screens/ # screens only used in Home feature
-| | | | |-- Home.tsx
-| | | | |-- Home.test.ts
-| | | |-- HomeApi.ts # API's related to Home
-| | | |-- HomeSlice.ts # SLice's related to Home
-| | | |-- Helper.ts
-| | | |-- types.ts # types only used in Home
-| | |
-| | |-- ... # Other features
-| |--services # baseApi and global API's
-| |-- store # redux store
-| |-- theme # theme related code
-| |-- navigation
-| |-- utils # global utils / helpers
+|   |-- assets/ # Images, fonts, icons, etc.
+|   |
+|   |-- components/ # Shared, reusable UI components
+|   |  |-- Button/ # "Button" UI component
+|   |  | |-- Button.tsx
+|   |  | |-- Board.test.ts
+|   |  | |-- types.ts
+|   |  |
+|   |  |-- ... # Other shared components
+|   |
+|   |-- features/ # App screens
+|   |  |-- Home/ # Home screen module
+|   |  | |-- components/ # Components only used in Home feature
+|   |  | |-- screens/ # screens only used in Home feature
+|   |  | |    |-- Home.tsx
+|   |  | |    |-- Home.test.ts
+|   |  | |-- HomeApi.ts # API's related to Home
+|   |  | |-- HomeSlice.ts # SLice's related to Home
+|   |  | |-- Helper.ts
+|   |  | |-- types.ts # types only used in Home
+|   |  |
+|   |  |-- ... # Other features
+|   |--services # baseApi and global API's
+|   |-- store # redux store
+|   |-- theme # theme related code
+|   |-- navigation
+|   |-- utils # global utils / helpers
 |-- .gitignore
 |-- package.json
 |-- README.md
 |-- App.tsx
 |-- ... # Other root-level files (e.g., tsconfig.json, metro.config.js)
+```
 
 ---
 
