@@ -7,7 +7,7 @@ A modern React Native e-commerce mobile app built with TypeScript. This app show
 ## 📁 Project Structure
 
 Here's a simplified view of the folder structure inside the `src/` directory:
-
+```bash
 |-- android
 ├── 📁 ios
 |-- src/
@@ -43,7 +43,7 @@ Here's a simplified view of the folder structure inside the `src/` directory:
 |-- README.md
 |-- App.tsx
 |-- ... # Other root-level files (e.g., tsconfig.json, metro.config.js)
-
+```
 ---
 
 ## 🚀 Scripts
