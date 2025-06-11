@@ -1,97 +1,83 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# 🛍️ Shop Me Mobile
 
-# Getting Started
+A modern React Native e-commerce mobile app built with TypeScript. This app showcases clean architecture, reusable components, and a scalable folder structure — ideal for real-world production apps.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+---
 
-## Step 1: Start Metro
+## 📁 Project Structure
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+Here's a simplified view of the folder structure inside the `src/` directory:
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+|-- android
+├── 📁 ios
+|-- src/
+| |-- assets/ # Images, fonts, icons, etc.
+| |
+| |-- components/ # Shared, reusable UI components
+| | |-- Button/ # "Button" UI component
+| | | |-- Button.tsx
+| | | |-- Board.test.ts
+| | | |-- types.ts
+| | |
+| | |-- ... # Other shared components
+| |
+| |-- features/ # App screens
+| | |-- Home/ # Home screen module
+| | | |-- components/ # Components only used in Home feature
+| | | |-- screens/ # screens only used in Home feature
+| | | | |-- Home.tsx
+| | | | |-- Home.test.ts
+| | | |-- HomeApi.ts # API's related to Home
+| | | |-- HomeSlice.ts # SLice's related to Home
+| | | |-- Helper.ts
+| | | |-- types.ts # types only used in Home
+| | |
+| | |-- ... # Other features
+| |--services # baseApi and global API's
+| |-- store # redux store
+| |-- theme # theme related code
+| |-- navigation
+| |-- utils # global utils / helpers
+|-- .gitignore
+|-- package.json
+|-- README.md
+|-- App.tsx
+|-- ... # Other root-level files (e.g., tsconfig.json, metro.config.js)
 
-```sh
-# Using npm
-npm start
+---
 
-# OR using Yarn
-yarn start
+## 🚀 Scripts
+
+The following scripts are available in the project for development and testing:
+
+| Script                | Description                                            |
+| --------------------- | ------------------------------------------------------ |
+| `npm run android`     | Launch the app on an Android emulator/device           |
+| `npm run ios`         | Launch the app on an iOS simulator                     |
+| `npm run lint`        | Run ESLint on the codebase to check code quality       |
+| `npm start`           | Start the Metro bundler for React Native               |
+| `npm test`            | Run unit tests with Jest                               |
+| `npm run json-server` | Start a mock REST API using `json-server` on port 3000 |
+
+> ℹ️ Make sure you have Android Studio or Xcode installed to run the app on a device/emulator.
+
+---
+
+## 📦 Tech Stack
+
+- React Native (TypeScript)
+- Styled Components
+- Jest for testing
+- ESLint for linting
+- JSON Server for mock API
+
+---
+
+## 🧪 Testing
+
+Run tests using:
+
+```bash
+npm test
+
 ```
-
-## Step 2: Build and run your app
-
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
-```
-
-### iOS
-
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
-
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
-
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
