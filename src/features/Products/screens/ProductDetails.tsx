@@ -1,6 +1,11 @@
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import React from 'react';
-import {ActivityIndicator, FlatList, ScrollView} from 'react-native';
+import React, {useCallback} from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  ListRenderItem,
+  ScrollView,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
 
@@ -27,16 +32,22 @@ const ProductDetails = () => {
 
   const {data: product, isLoading} = useGetProductByIdQuery(productId);
 
+  const renderSizeItem: ListRenderItem<string> = useCallback(
+    ({item}) => (
+      <SizeBox>
+        <Title style={{fontSize: 14}}>{item}</Title>
+      </SizeBox>
+    ),
+    [],
+  );
+
   if (isLoading) {
     return <ActivityIndicator size="large" color="#000" />;
   }
 
   return (
     <Container>
-      <Header
-        backPressed={() => navigation.goBack()}
-        title={product?.title ?? ''}
-      />
+      <Header backPressed={navigation.goBack} title={product?.title ?? ''} />
       <ScrollView
         contentContainerStyle={{paddingBottom: 20}}
         showsVerticalScrollIndicator={false}>
@@ -57,11 +68,7 @@ const ProductDetails = () => {
               data={product?.sizes}
               keyExtractor={(item, index) => `${item}-${index}`}
               showsHorizontalScrollIndicator={false}
-              renderItem={({item}) => (
-                <SizeBox>
-                  <Title style={{fontSize: 14}}>{item}</Title>
-                </SizeBox>
-              )}
+              renderItem={renderSizeItem}
             />
           </Section>
 

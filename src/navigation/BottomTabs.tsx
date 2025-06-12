@@ -2,9 +2,9 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {CommonActions} from '@react-navigation/native';
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Favorites from '../features/Favorites/screen/Favorites';
 import Profile from '../features/Profile/Profile';
 import CartStackNavigator from './CartStackNavigator';
+import FavStackNavigator from './FavStackNavigator';
 import HomeStackNavigator from './HomeStackNavigator';
 
 export type BottomTabParamList = {
@@ -51,7 +51,7 @@ const BottomTabs = () => {
       />
       <BottomNav.Screen
         name="Favorites"
-        component={Favorites}
+        component={FavStackNavigator}
         listeners={({navigation, route}) => ({
           tabPress: e => {
             e.preventDefault();

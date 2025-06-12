@@ -1,9 +1,17 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {memo, useState} from 'react';
-import {Dimensions, FlatList, TouchableOpacity} from 'react-native';
+import React, {memo, useCallback, useState} from 'react';
+import {
+  Dimensions,
+  FlatList,
+  ListRenderItem,
+  TouchableOpacity,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
 
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {FavStackParamList} from 'navigation/FavStackNavigator';
+import {Product} from 'types/types';
 import Header from '../../../components/Headers/Header';
 import {useGetFavoritesQuery} from '../favoritesApi';
 import {ItemProps} from '../types';
@@ -13,8 +21,10 @@ const {width} = Dimensions.get('screen');
 const ProductItem = memo(({item, goToDetails}: ItemProps) => {
   const [isFav, setIsFav] = useState(false);
   const toggleFav = () => setIsFav(!isFav);
+  const details = () => goToDetails(item.id);
+
   return (
-    <CardTouchable onPress={() => goToDetails(item.id)}>
+    <CardTouchable onPress={details}>
       <ProductCard>
         <ImageWrapper>
           <ProductImage source={{uri: item.images[0]}} resizeMode="cover" />
@@ -45,12 +55,18 @@ const ProductItem = memo(({item, goToDetails}: ItemProps) => {
  */
 
 const Favorites = () => {
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<FavStackParamList>>();
   const {data: favData, isLoading} = useGetFavoritesQuery();
 
   const goToDetails = (id: number) => {
     navigation.navigate('ProductDetails', {id: id});
   };
+
+  const renderProductItem: ListRenderItem<Product> = useCallback(
+    ({item}) => <ProductItem item={item} goToDetails={goToDetails} />,
+    [goToDetails],
+  );
 
   return (
     <Container>
@@ -59,9 +75,7 @@ const Favorites = () => {
         data={favData}
         keyExtractor={item => item.id.toString()}
         contentContainerStyle={{paddingBottom: 50}}
-        renderItem={({item, index}) => (
-          <ProductItem item={item} key={index} goToDetails={goToDetails} />
-        )}
+        renderItem={renderProductItem}
         numColumns={2}
         showsVerticalScrollIndicator={false}
       />

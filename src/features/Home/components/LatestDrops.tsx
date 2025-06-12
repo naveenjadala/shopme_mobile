@@ -1,8 +1,8 @@
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {HomeStackParamList} from 'navigation/HomeStackNavigator';
-import React from 'react';
-import {Dimensions, FlatList} from 'react-native';
+import React, {useCallback} from 'react';
+import {Dimensions, FlatList, ListRenderItem} from 'react-native';
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import styled from 'styled-components/native';
 import Button from '../../../components/buttons/Button';
@@ -49,6 +49,13 @@ const LatestDrops: React.FC<Props> = ({latestData, goToProducts, loading}) => {
     </ContainerCard>
   );
 
+  const renderProductCard: ListRenderItem<LatestData> = useCallback(
+    ({item}) => (
+      <HomeProductCard item={item} getProductDetails={handleProductDetails} />
+    ),
+    [handleProductDetails],
+  );
+
   if (loading) {
     return (
       <Container>
@@ -75,12 +82,7 @@ const LatestDrops: React.FC<Props> = ({latestData, goToProducts, loading}) => {
           justifyContent: 'center',
           alignSelf: 'center',
         }}
-        renderItem={({item}) => (
-          <HomeProductCard
-            item={item}
-            getProductDetails={handleProductDetails}
-          />
-        )}
+        renderItem={renderProductCard}
         numColumns={NUM_COLUMNS}
         scrollEnabled={false}
       />
