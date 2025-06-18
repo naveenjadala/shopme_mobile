@@ -1,6 +1,7 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
+import {useTheme} from '../../theme/ThemeContext';
 
 interface Props {
   backPressed?: () => void;
@@ -9,6 +10,7 @@ interface Props {
 }
 
 const Header = ({backPressed, title, isBackButton = true}: Props) => {
+  const {theme} = useTheme();
   return (
     <Container>
       {isBackButton ? (
@@ -16,7 +18,11 @@ const Header = ({backPressed, title, isBackButton = true}: Props) => {
           <BackButton
             onPress={backPressed}
             hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
-            <Icon name="chevron-back" size={24} color="#000" />
+            <Icon
+              name="chevron-back"
+              size={24}
+              color={theme.colors.textPrimary}
+            />
           </BackButton>
         </Left>
       ) : (
@@ -37,7 +43,6 @@ const Container = styled.View`
   align-items: center;
   height: 60px;
   padding-horizontal: 10px;
-  background-color: #fff;
 `;
 
 const Left = styled.View`
@@ -63,5 +68,5 @@ const BackButton = styled.TouchableOpacity`
 const Title = styled.Text`
   font-size: 16px;
   font-weight: 500;
-  color: #000;
+  color: ${({theme}) => theme.colors.textPrimary};
 `;

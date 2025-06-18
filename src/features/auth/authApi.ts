@@ -1,0 +1,61 @@
+import {FirebaseAuthTypes, getAuth} from '@react-native-firebase/auth';
+import {auth} from '../../firebase/firebaseConfig';
+import {baseApi} from '../../services';
+
+const authApi = baseApi.injectEndpoints({
+  endpoints: builder => ({
+    login: builder.mutation<
+      {user: {uid: string; email: string | null; displayName: string | null}},
+      {email: string; password: string}
+    >({
+      async queryFn({email, password}) {
+        try {
+          const userDetails = await getAuth().signInWithEmailAndPassword(
+            email,
+            password,
+          );
+          const user = userDetails.user;
+          const safeUser = {
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+          };
+          return {data: {user: safeUser}};
+        } catch (error) {
+          return {
+            error: {
+              status: 500,
+              statusText: error,
+              data: 'Unknown error',
+            },
+          };
+        }
+      },
+    }),
+    signUp: builder.mutation<
+      FirebaseAuthTypes.UserCredential,
+      {name: string; email: string; password: string}
+    >({
+      async queryFn({name, email, password}) {
+        try {
+          const userDetails = await auth().createUserWithEmailAndPassword(
+            email,
+            password,
+          );
+          await userDetails.user.updateProfile({displayName: name});
+          return {data: userDetails};
+        } catch (error) {
+          return {
+            error: {
+              status: 500,
+              statusText: error,
+              data: error,
+            },
+          };
+        }
+      },
+    }),
+  }),
+});
+
+export const {useLoginMutation, useSignUpMutation} = authApi;

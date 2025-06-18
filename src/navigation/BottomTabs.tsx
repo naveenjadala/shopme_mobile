@@ -19,7 +19,7 @@ const BottomNav = createBottomTabNavigator<BottomTabParamList>();
 const BottomTabs = () => {
   return (
     <BottomNav.Navigator
-      screenOptions={({route}) => ({
+      screenOptions={({route, theme}) => ({
         headerShown: false,
         tabBarIcon: ({color, size, focused}) => {
           let iconName: string = 'home';
@@ -31,7 +31,7 @@ const BottomTabs = () => {
           return <Ionicons name={iconName} size={20} color={color} />;
         },
 
-        tabBarActiveTintColor: '#000',
+        tabBarActiveTintColor: theme.colors.primary,
         tabBarInactiveTintColor: 'gray',
       })}>
       <BottomNav.Screen

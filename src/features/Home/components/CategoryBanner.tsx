@@ -37,7 +37,7 @@ const Container = styled.View`
 const Card = styled.TouchableOpacity`
   height: ${screenWidth / 3 - 4}px;
   width: ${screenWidth}px;
-  margin: 2px;
+  margin: 1px;
 `;
 
 const BackgroundImage = styled.ImageBackground`

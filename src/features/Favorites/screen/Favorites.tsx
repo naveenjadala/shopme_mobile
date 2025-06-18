@@ -87,7 +87,6 @@ export default Favorites;
 
 const Container = styled.View`
   flex: 1;
-  background-color: #fff;
 `;
 
 const CardTouchable = styled(TouchableOpacity)`
@@ -112,7 +111,7 @@ const ProductTitle = styled.Text`
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 4px;
-  color: #111;
+  color: ${({theme}) => theme.colors.textPrimary};
 `;
 
 const ImageWrapper = styled.View`
@@ -126,7 +125,6 @@ const FavIcon = styled.TouchableOpacity`
   position: absolute;
   top: 10px;
   right: 10px;
-  background-color: white;
   padding: 3px;
   border-radius: 20px;
 `;

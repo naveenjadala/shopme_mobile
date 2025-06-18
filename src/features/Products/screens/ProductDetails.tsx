@@ -30,7 +30,9 @@ const ProductDetails = () => {
     >();
   const productId = route.params?.id || 0;
 
-  const {data: product, isLoading} = useGetProductByIdQuery(productId);
+  const {data: product, isLoading} = useGetProductByIdQuery({
+    productId: productId,
+  });
 
   const renderSizeItem: ListRenderItem<string> = useCallback(
     ({item}) => (
@@ -52,7 +54,9 @@ const ProductDetails = () => {
         contentContainerStyle={{paddingBottom: 20}}
         showsVerticalScrollIndicator={false}>
         <ProductImage
-          source={{uri: product?.images?.[1] || product?.images?.[0]}}
+          source={{
+            uri: product?.images?.[1] || product?.images?.[0],
+          }}
           resizeMode="cover"
         />
         <Content>

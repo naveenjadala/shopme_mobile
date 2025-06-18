@@ -5,8 +5,8 @@ import React, {useCallback} from 'react';
 import {Dimensions, FlatList, ListRenderItem} from 'react-native';
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import styled from 'styled-components/native';
+import {Product} from 'types/types';
 import Button from '../../../components/buttons/Button';
-import {LatestData} from '../types';
 import HomeProductCard from './HomeProductCard';
 
 const {width} = Dimensions.get('window');
@@ -16,7 +16,7 @@ const CARD_SPACING = 15;
 const CARD_WIDTH = (width - CARD_SPACING * (NUM_COLUMNS + 1)) / NUM_COLUMNS;
 
 interface Props {
-  latestData: LatestData[];
+  latestData: Product[];
   goToProductDetails?: (id: number) => void;
   goToProducts: () => void;
   loading?: boolean;
@@ -25,7 +25,7 @@ interface Props {
 /**
  * LatestDrops component renders a list of latest products.
  *
- * @param {LatestData[]} latestData - latest products data
+ * @param {Product[]} latestData - latest products data
  * @param {() => void} goToProducts - callback function to navigate to Products screen
  * @param {boolean} [loading=false] - whether the component is loading or not
  *
@@ -49,7 +49,7 @@ const LatestDrops: React.FC<Props> = ({latestData, goToProducts, loading}) => {
     </ContainerCard>
   );
 
-  const renderProductCard: ListRenderItem<LatestData> = useCallback(
+  const renderProductCard: ListRenderItem<Product> = useCallback(
     ({item}) => (
       <HomeProductCard item={item} getProductDetails={handleProductDetails} />
     ),

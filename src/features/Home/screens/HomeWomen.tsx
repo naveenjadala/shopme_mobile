@@ -8,7 +8,7 @@ import img2 from '../../../asserts/images/img2.png';
 import img3 from '../../../asserts/images/img3.png';
 import {LatestDrops, NewFeatured} from '../components';
 import CategoryBanner from '../components/CategoryBanner';
-import {useGetLatestDropsQuery, useGetWomenTabQuery} from '../homeApi';
+import {useGetLatestProductsQuery, useGetNewFeaturedQuery} from '../homeApi';
 
 const categories = [
   {
@@ -37,12 +37,15 @@ const HomeWomen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
 
-  const {data: womenData, isLoading, isError, error} = useGetWomenTabQuery();
-  const {data: latestDropsData} = useGetLatestDropsQuery({
-    _page: 1,
-    _limit: 9,
+  const categoryFilter = {
     gender: 'women',
+    isLatest: true,
+  };
+  const {data: newFeatured, isLoading} = useGetNewFeaturedQuery({
+    type: 'women',
   });
+  const {data: latestDropsData, isLoading: dropsLoading} =
+    useGetLatestProductsQuery({categoryFilter});
 
   const reDirectToProduct = (params: object) => {
     navigation.navigate('Products', params);
@@ -51,7 +54,7 @@ const HomeWomen = () => {
   return (
     <ScrollView>
       <NewFeatured
-        newFeatured={womenData?.newAndFeatured || []}
+        newFeatured={newFeatured || []}
         onClick={() => reDirectToProduct({isFeatured: true, gender: 'women'})}
         loading={isLoading}
       />
@@ -60,7 +63,7 @@ const HomeWomen = () => {
         onPress={category => reDirectToProduct({category, gender: 'women'})}
       />
       <LatestDrops
-        latestData={latestDropsData || []}
+        latestData={latestDropsData?.products || []}
         goToProducts={() =>
           reDirectToProduct({isLatest: true, gender: 'women'})
         }

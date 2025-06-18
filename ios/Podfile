@@ -1,9 +1,12 @@
+require_relative '../node_modules/react-native/scripts/react_native_pods'
 # Resolve react_native_pods.rb with node to allow for hoisting
 require Pod::Executable.execute_command('node', ['-p',
   'require.resolve(
     "react-native/scripts/react_native_pods.rb",
     {paths: [process.argv[1]]},
   )', __dir__]).strip
+
+  use_modular_headers!
 
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
@@ -23,6 +26,10 @@ target 'shopme_mobile' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  pod 'FirebaseAuth'
+  pod 'FirebaseFirestore'
+  pod 'FirebaseStorage'
+
   post_install do |installer|
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
     react_native_post_install(
@@ -33,3 +40,32 @@ target 'shopme_mobile' do
     )
   end
 end
+# require_relative '../node_modules/react-native/scripts/react_native_pods'
+
+# platform :ios, '15.1' # Firebase requires iOS 12.4+
+# use_modular_headers! # Required for Firebase
+
+# target 'shopme_mobile' do
+#   # Standard React Native setup
+#   config = use_native_modules!
+  
+#   use_react_native!(
+#     :path => config[:reactNativePath],
+#     :hermes_enabled => false # Set to true if using Hermes
+#   )
+
+#   # Firebase pods with modular headers
+#   pod 'Firebase/Auth', :modular_headers => true
+#   pod 'Firebase/Firestore', :modular_headers => true
+#   pod 'Firebase/Storage', :modular_headers => true
+
+#   post_install do |installer|
+#     react_native_post_install(installer)
+#     # Fix for Xcode 14.3+ if needed
+#     installer.pods_project.targets.each do |target|
+#       target.build_configurations.each do |config|
+#         config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+#       end
+#     end
+#   end
+# end

@@ -11,4 +11,35 @@ export interface Product {
   category: string;
   price: number;
   images: string[];
+  description: string;
+  sizes: string[];
+  colors: string[];
+  rating: number;
+  stock: number;
+  isFeatured: boolean;
+  isLatest: boolean;
+  reviews: {
+    id: number;
+    user: string;
+    rating: number;
+    comment: string;
+  }[];
+  user: string;
+  image: string;
+  iconImg: string;
 }
+
+export type CategoryFilter = {
+  gender?: string;
+  category?: string;
+  subCategory?: string;
+  brand?: string;
+  color?: string;
+  size?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  minRating?: number;
+  maxRating?: number;
+  isLatest?: boolean;
+  isFeatured?: boolean;
+};

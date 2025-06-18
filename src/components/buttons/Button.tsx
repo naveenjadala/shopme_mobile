@@ -54,12 +54,12 @@ const ButtonContainer = styled.TouchableOpacity<ButtonStyleProps>`
   padding-vertical: 15px;
   padding-horizontal: 15px;
   border-radius: 24px;
-  background-color: ${({type}) => {
+  background-color: ${({type, theme}) => {
     switch (type) {
       case 'primary':
-        return '#111';
+        return theme.colors.primary;
       case 'secondary':
-        return '#fff';
+        return theme.colors.secondary;
       case 'tertiary':
         return 'transparent';
       case 'icon':
@@ -74,8 +74,11 @@ const ButtonContainer = styled.TouchableOpacity<ButtonStyleProps>`
 `;
 
 const ButtonText = styled.Text<ButtonStyleProps>`
-  color: ${({type}) => (type === 'secondary' ? '#111' : '#fff')};
-  font-size: 16px;
+  color: ${({type, theme}) =>
+    type === 'secondary'
+      ? theme.colors.textPrimary
+      : theme.colors.textSecondary};
+  font-size: ${({theme}) => theme.fontSize.md}px;
   font-weight: 600;
   margin-left: ${({type}) => (type === 'icon' ? '8px' : '0px')};
 `;

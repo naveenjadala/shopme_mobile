@@ -1,9 +1,13 @@
+import {getAuth} from '@react-native-firebase/auth';
 import React, {useCallback} from 'react';
 import {Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
+
 import img from '../../asserts/images/img1.png';
 import Header from '../../components/Headers/Header';
+import {useTheme} from '../../theme/ThemeContext';
+import {useLogoutMutation} from './ProfileApi';
 
 const {height} = Dimensions.get('window');
 
@@ -20,23 +24,34 @@ const OptionItem = React.memo(
   ({label, onPress}: {label: string; onPress?: () => void}) => (
     <OptionTouchable onPress={onPress}>
       <OptionText>{label}</OptionText>
-      <Icon name="chevron-forward" size={20} color="#333" />
+      <Icon
+        name="chevron-forward"
+        size={20}
+        color={useTheme()?.theme.colors.text}
+      />
     </OptionTouchable>
   ),
 );
 
 const Profile = () => {
+  const [logOut, {isLoading, error, isSuccess}] = useLogoutMutation();
+  const user = getAuth().currentUser;
+  console.log(user);
+
   const handlePress = useCallback((label: string) => {
-    console.log(`${label} pressed`);
+    if (label === 'Logout') {
+      logOut();
+    }
   }, []);
+
   return (
     <Container>
       <Header title="Profile" isBackButton={false} />
       <ScrollContainer contentContainerStyle={{flexGrow: 1}}>
         <ProfileCard>
           <ProfileImage source={img} resizeMode="cover" />
-          <Name>John Doe</Name>
-          <Email>3oY7t@example.com</Email>
+          <Name>{user?.displayName}</Name>
+          <Email>{user?.email}</Email>
         </ProfileCard>
 
         <OptionsCard>
@@ -57,7 +72,6 @@ export default Profile;
 
 const Container = styled.View`
   flex: 1;
-  background-color: #f3f4f6;
 `;
 
 const ScrollContainer = styled.ScrollView``;
@@ -69,7 +83,6 @@ const ProfileCard = styled.View`
   padding: 20px;
   margin: 15px;
   border-radius: 10px;
-  background-color: white;
   elevation: 2;
 `;
 
@@ -81,18 +94,18 @@ const ProfileImage = styled.Image`
 `;
 
 const Name = styled.Text`
-  font-size: 16px;
+  color: ${({theme}) => theme.colors.textPrimary};
+  font-size: ${({theme}) => theme.fontSize.md}px;
   font-weight: bold;
   margin-top: 5px;
 `;
 
 const Email = styled.Text`
-  color: gray;
-  font-size: 14px;
+  color: ${({theme}) => theme.colors.textPrimary};
+  font-size: ${({theme}) => theme.fontSize.md}px;
 `;
 
 const OptionsCard = styled.View`
-  background-color: white;
   padding: 20px;
   margin: 15px;
   border-radius: 10px;
@@ -107,6 +120,6 @@ const OptionTouchable = styled.TouchableOpacity`
 `;
 
 const OptionText = styled.Text`
-  font-size: 16px;
-  color: #111;
+  font-size: ${({theme}) => theme.fontSize.md}px;
+  color: ${({theme}) => theme.colors.textPrimary};
 `;
