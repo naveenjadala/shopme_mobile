@@ -19,7 +19,7 @@ import {ItemProps} from '../types';
 const {width} = Dimensions.get('screen');
 
 const ProductItem = memo(({item, goToDetails}: ItemProps) => {
-  const [isFav, setIsFav] = useState(false);
+  const [isFav, setIsFav] = useState(true);
   const toggleFav = () => setIsFav(!isFav);
   const details = () => goToDetails(item.id);
 
@@ -57,6 +57,7 @@ const ProductItem = memo(({item, goToDetails}: ItemProps) => {
 const Favorites = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<FavStackParamList>>();
+
   const {data: favData, isLoading} = useGetFavoritesQuery();
 
   const goToDetails = (id: number) => {
@@ -67,6 +68,10 @@ const Favorites = () => {
     ({item}) => <ProductItem item={item} goToDetails={goToDetails} />,
     [goToDetails],
   );
+
+  if (isLoading) {
+    return <Header title="Favorites" isBackButton={false} />;
+  }
 
   return (
     <Container>
@@ -127,4 +132,5 @@ const FavIcon = styled.TouchableOpacity`
   right: 10px;
   padding: 3px;
   border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
 `;

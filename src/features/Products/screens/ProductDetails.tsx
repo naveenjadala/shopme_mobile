@@ -9,9 +9,12 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
 
+import {getAuth} from '@react-native-firebase/auth';
+import {doc, setDoc} from '@react-native-firebase/firestore';
 import Button from '../../../components/buttons/Button';
 import Header from '../../../components/Headers/Header';
 import Spacing from '../../../components/Spacing';
+import {db} from '../../../firebase/firebaseConfig';
 import {useGetProductByIdQuery} from '../productsApi';
 import {ProductDetailRouteParams} from '../types';
 
@@ -29,6 +32,7 @@ const ProductDetails = () => {
       RouteProp<{ProductDetail: ProductDetailRouteParams}, 'ProductDetail'>
     >();
   const productId = route.params?.id || 0;
+  console.log(productId, 'productId');
 
   const {data: product, isLoading} = useGetProductByIdQuery({
     productId: productId,
@@ -42,6 +46,45 @@ const ProductDetails = () => {
     ),
     [],
   );
+
+  // const fav = async product => {
+  //   const userId = getAuth().currentUser?.uid;
+  //   console.log(userId, 'userId');
+
+  //   if (!userId) return;
+  //   const favoritesRef = doc(db, 'users', userId, 'favorites', product.id);
+  //   console.log('Product added to favorites successfully!', favoritesRef);
+  //   await setDoc(favoritesRef, {
+  //     ...product,
+  //     addedAt: new Date(),
+  //   });
+  //   console.log('Product added to favorites successfully!');
+  // };
+
+  async function addToFavorites(item) {
+    try {
+      const userId = getAuth().currentUser?.uid;
+      console.log(userId, 'userId');
+
+      if (!userId) return;
+      console.log(item, 'item');
+
+      const favoritesRef = doc(
+        db,
+        'users',
+        userId,
+        'favorites',
+        item.id.toString(),
+      );
+      await setDoc(favoritesRef, {
+        ...item,
+        addedAt: new Date(),
+      });
+      console.log('Added to favorites!');
+    } catch (error) {
+      console.error('Error adding to favorites:', error);
+    }
+  }
 
   if (isLoading) {
     return <ActivityIndicator size="large" color="#000" />;
@@ -83,7 +126,9 @@ const ProductDetails = () => {
             title="Wishlist"
             type="secondary"
             icon={<Icon name="heart-outline" size={20} color="#111" />}
-            onPress={() => {}}
+            onPress={() => {
+              addToFavorites(product);
+            }}
             iconPosition="right"
           />
           <Spacing height={20} />

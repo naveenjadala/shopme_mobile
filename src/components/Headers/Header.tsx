@@ -16,6 +16,7 @@ const Header = ({backPressed, title, isBackButton = true}: Props) => {
       {isBackButton ? (
         <Left>
           <BackButton
+            testID="back-button"
             onPress={backPressed}
             hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
             <Icon

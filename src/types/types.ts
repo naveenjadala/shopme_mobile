@@ -27,6 +27,7 @@ export interface Product {
   user: string;
   image: string;
   iconImg: string;
+  addedAt?: string;
 }
 
 export type CategoryFilter = {

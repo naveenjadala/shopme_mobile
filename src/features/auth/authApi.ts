@@ -1,5 +1,10 @@
-import {FirebaseAuthTypes, getAuth} from '@react-native-firebase/auth';
-import {auth} from '../../firebase/firebaseConfig';
+import {
+  createUserWithEmailAndPassword,
+  FirebaseAuthTypes,
+  getAuth,
+} from '@react-native-firebase/auth';
+import {doc, setDoc} from '@react-native-firebase/firestore';
+import {db} from '../../firebase/firebaseConfig';
 import {baseApi} from '../../services';
 
 const authApi = baseApi.injectEndpoints({
@@ -38,11 +43,22 @@ const authApi = baseApi.injectEndpoints({
     >({
       async queryFn({name, email, password}) {
         try {
-          const userDetails = await auth().createUserWithEmailAndPassword(
+          const auth = getAuth();
+          const userDetails = await createUserWithEmailAndPassword(
+            auth,
             email,
             password,
           );
-          await userDetails.user.updateProfile({displayName: name});
+          const user = userDetails.user;
+          const userId = user.uid;
+
+          await setDoc(doc(db, 'users', userId), {
+            email: email,
+            displayName: name,
+            createdAt: new Date(),
+            lastLogin: new Date(),
+            isActive: true,
+          });
           return {data: userDetails};
         } catch (error) {
           return {

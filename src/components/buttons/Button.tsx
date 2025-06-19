@@ -25,18 +25,23 @@ const Button = ({
 }: ButtonProps) => {
   return (
     <ButtonContainer
+      testID="button"
       type={type}
       onPress={onPress}
       disabled={disabled}
       style={style}
       activeOpacity={0.8}>
-      {icon && iconPosition === 'left' && <IconWrapper>{icon}</IconWrapper>}
+      {icon && iconPosition === 'left' && (
+        <IconWrapper testID="left-icon">{icon}</IconWrapper>
+      )}
       {title && (
         <ButtonText type={type} style={textStyle}>
           {title}
         </ButtonText>
       )}
-      {icon && iconPosition === 'right' && <IconWrapper>{icon}</IconWrapper>}
+      {icon && iconPosition === 'right' && (
+        <IconWrapper testID="right-icon">{icon}</IconWrapper>
+      )}
     </ButtonContainer>
   );
 };

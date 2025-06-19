@@ -11,7 +11,9 @@ import {
 } from 'react-native';
 import styled from 'styled-components/native';
 
+import Icon from 'react-native-vector-icons/Ionicons';
 import Header from '../../../components/Headers/Header';
+import {useFavorites} from '../../../hooks/useFavorites';
 import {CategoryFilter, Product} from '../../../types/types';
 import {useGetAllProductsQuery} from '../productsApi';
 
@@ -32,8 +34,8 @@ const ProductsList = () => {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const routeParams = route.params ?? {};
   const pageSize = 10;
-
-  console.log(routeParams, 'routeParams');
+  const {favorites, loading: favLoading} = useFavorites();
+  console.log(favorites, 'favorites');
 
   const [page, setPage] = useState(1);
 
@@ -53,8 +55,6 @@ const ProductsList = () => {
 
   useEffect(() => {
     if (data?.products && !isFetching && page > 1) {
-      console.log('data?.products', data?.products);
-
       setAllProducts(prev => {
         const newProducts = data.products.filter(
           newProduct => !prev.some(p => p.id === newProduct.id),
@@ -71,7 +71,24 @@ const ProductsList = () => {
       <CardTouchable
         onPress={() => navigation.navigate('ProductDetails', {id: item.id})}>
         <ProductCard>
-          <ProductImage source={{uri: item.images[0]}} resizeMode="cover" />
+          <ImageWrapper>
+            <ProductImage source={{uri: item.images[0]}} resizeMode="cover" />
+            {/* <TouchableOpacity> */}
+            <FavIcon>
+              <Icon
+                name={
+                  favorites.includes(item.id.toString())
+                    ? 'heart'
+                    : 'heart-outline'
+                }
+                size={20}
+                color={
+                  favorites.includes(item.id.toString()) ? 'black' : 'gray'
+                }
+              />
+            </FavIcon>
+          </ImageWrapper>
+          {/* </TouchableOpacity> */}
           <ProductInfo>
             <ProductTitle numberOfLines={1}>{item.title}</ProductTitle>
             <ProductCategory>{item.category}</ProductCategory>
@@ -80,7 +97,7 @@ const ProductsList = () => {
         </ProductCard>
       </CardTouchable>
     ),
-    [navigation],
+    [navigation, favorites],
   );
 
   const testFilters = () => {
@@ -188,4 +205,20 @@ const ProductPrice = styled.Text`
   font-weight: 500;
   margin-top: 4px;
   color: ${({theme}) => theme.colors.textPrimary};
+`;
+
+const ImageWrapper = styled.View`
+  width: ${width / 2}px;
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+`;
+
+const FavIcon = styled.TouchableOpacity`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 3px;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
 `;
