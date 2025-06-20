@@ -16,6 +16,9 @@ end
 
 target 'shopme_mobile' do
   config = use_native_modules!
+  use_frameworks! :linkage => :static
+  $RNFirebaseAsStaticFramework = true
+  $FirebaseSDKVersion = '11.13.0'
 
   use_react_native!(
     :path => config[:reactNativePath],
