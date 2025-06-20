@@ -14,6 +14,7 @@ export interface ProductDetailsProps extends Product {
     rating: number;
     comment: string;
   }[];
+  createdAt?: string;
 }
 
 export type ProductDetailRouteParams = {

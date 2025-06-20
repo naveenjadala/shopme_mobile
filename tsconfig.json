@@ -1,7 +1,7 @@
 {
   "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
-    "types": ["styled-components"],
+    "types": ["styled-components", "jest"],
     "baseUrl": "src",
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,

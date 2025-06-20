@@ -8,7 +8,7 @@
                 "link": "/men/summer-essentials",
                 "cta": "Shop Now",
                 "ctaLink": "/men/summer-essentials",
-                "type": "mobile",
+                "type": "men",
                 "releaseDate": "2025-05-20"
             },
             {
@@ -18,7 +18,7 @@
                 "link": "/men/trail-running",
                 "cta": "Explore",
                 "ctaLink": "/men/trail-running",
-                "type": "mobile",
+                "type": "men",
                 "releaseDate": "2025-05-22"
             },
             {
@@ -28,7 +28,7 @@
                 "link": "/men/fathers-day",
                 "cta": "Find Gifts",
                 "ctaLink": "/men/fathers-day",
-                "type": "mobile",
+                "type": "men",
                 "releaseDate": "2025-06-01"
             },
             {
@@ -38,7 +38,7 @@
                 "link": "/men/new-arrivals",
                 "cta": "Check it Out",
                 "ctaLink": "/men/new-arrivals",
-                "type": "mobile",
+                "type": "men",
                 "releaseDate": "2025-05-25"
             },
             {
@@ -48,7 +48,7 @@
                 "link": "/men/best-sellers",
                 "cta": "Shop Best Sellers",
                 "ctaLink": "/men/best-sellers",
-                "type": "mobile",
+                "type": "men",
                 "releaseDate": "2025-05-30"
             }
         ]
@@ -1412,7 +1412,7 @@
             "gender": "men",
             "brand": "Nike",
             "images": [
-                "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/d683aebb-97b5-43bd-b2bb-1d57f35c7412/AS+M+NK+SOLO+SWSH+FT+PO+HOODIE.png",
+                "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/fcfb2466-9399-469a-82f5-fac627caa1f3/AS+M+NK+CLUB+FT+OS+PO+HDY+OPP1.png",
                 "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/ed05e04d-f4d1-49c4-9860-69a6dca841df/AS+M+NK+SOLO+SWSH+FT+PO+HOODIE.png"
             ],
             "sizes": [
@@ -1523,7 +1523,7 @@
             "gender": "men",
             "brand": "Nike",
             "images": [
-                "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/d683aebb-97b5-43bd-b2bb-1d57f35c7412/AS+M+NK+SOLO+SWSH+FT+PO+HOODIE.png",
+                "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/28f58860-55f4-4bd0-aecc-c0b0a40ce681/M+J+FLT+MVP+FLC+PO.png",
                 "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/ed05e04d-f4d1-49c4-9860-69a6dca841df/AS+M+NK+SOLO+SWSH+FT+PO+HOODIE.png"
             ],
             "sizes": [
@@ -2587,7 +2587,7 @@
             "gender": "men",
             "brand": "Nike",
             "images": [
-                "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/nike-sportswear-hoodie.png"
+                "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/fcfb2466-9399-469a-82f5-fac627caa1f3/AS+M+NK+CLUB+FT+OS+PO+HDY+OPP1.png"
             ],
             "sizes": [
                 "M",
@@ -2694,7 +2694,7 @@
             "gender": "men",
             "brand": "Nike",
             "images": [
-                "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/nike-sportswear-hoodie.png"
+                "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/28f58860-55f4-4bd0-aecc-c0b0a40ce681/M+J+FLT+MVP+FLC+PO.png"
             ],
             "sizes": [
                 "S",

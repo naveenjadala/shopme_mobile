@@ -14,6 +14,7 @@ export type Item = {
 };
 
 export interface PromotionBanner {
+  createdAt?: any;
   title: string;
   image: string;
   alt: string;
@@ -21,6 +22,7 @@ export interface PromotionBanner {
   cta: string;
   ctaLink: string;
   releaseDate: string;
+  type: string;
 }
 
 export interface CategoryData {

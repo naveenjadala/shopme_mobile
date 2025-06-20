@@ -1,7 +1,7 @@
 import React from 'react';
 import {Dimensions, Text} from 'react-native';
 import styled from 'styled-components/native';
-import {LatestData} from '../types';
+import {Product} from '../../../types/types';
 
 const {width} = Dimensions.get('window');
 const NUM_COLUMNS = 3;
@@ -9,7 +9,7 @@ const CARD_SPACING = 15;
 const CARD_WIDTH = (width - CARD_SPACING * (NUM_COLUMNS + 1)) / NUM_COLUMNS;
 
 interface Props {
-  item: LatestData;
+  item: Product;
   getProductDetails: (id: number) => void;
 }
 

@@ -6,6 +6,7 @@ declare module 'styled-components/native' {
       background: string;
       text: string;
       primary: string;
+      secondary: string;
       card: string;
       border: string;
       white: string;
@@ -16,6 +17,9 @@ declare module 'styled-components/native' {
       notification?: string;
       error?: string;
       success?: string;
+      inputBorder?: string;
+      placeholder?: string;
+      icon?: string;
     };
     spacing: {
       xs: number;
@@ -71,7 +75,8 @@ const SHARED_RADIUS = {
 export const lightTheme: DefaultTheme = {
   colors: {
     background: '#FFFFFF',
-    primary: '#007AFF',
+    secondary: '#FFF',
+    primary: '#000',
     text: '#000000',
     card: '#F2F2F2',
     border: '#DCDCDC',
@@ -81,7 +86,9 @@ export const lightTheme: DefaultTheme = {
     error: '#FF3B30',
     success: '#34C759',
     textPrimary: '#000000',
-    textSecondary: '#666666',
+    textSecondary: '#FFFFFF',
+    inputBorder: '#DDDDDD',
+    placeholder: '#999999',
   },
   spacing: SHARED_SPACING,
   fontSize: SHARED_FONT_SIZES,
@@ -92,7 +99,8 @@ export const lightTheme: DefaultTheme = {
 export const darkTheme: DefaultTheme = {
   colors: {
     background: '#000000',
-    primary: '#0A84FF',
+    secondary: '#000',
+    primary: '#FFF',
     text: '#FFFFFF',
     card: '#1C1C1E',
     border: '#3A3A3C',
@@ -102,7 +110,9 @@ export const darkTheme: DefaultTheme = {
     error: '#FF453A',
     success: '#30D158',
     textPrimary: '#FFFFFF',
-    textSecondary: '#B3B3B3',
+    textSecondary: '#000000',
+    inputBorder: '#555555',
+    placeholder: '#CCCCCC',
   },
   spacing: SHARED_SPACING,
   fontSize: SHARED_FONT_SIZES,
