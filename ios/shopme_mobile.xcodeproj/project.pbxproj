@@ -25,6 +25,9 @@
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = shopme_mobile/AppDelegate.swift; sourceTree = "<group>"; };
 		7A04DC94EC20C597357FC095 /* Pods_shopme_mobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shopme_mobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8151AFD62E057C3200453B3D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		819F006F2E096D5900558D8D /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ionicons.ttf; sourceTree = "<group>"; };
+		819F00702E096D6100558D8D /* FontAwesome6_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome6_Solid.ttf; sourceTree = "<group>"; };
+		819F00712E096D8C00558D8D /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = shopme_mobile/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -62,6 +65,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		81FF84E02E095FFA00B08CEB /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				819F00702E096D6100558D8D /* FontAwesome6_Solid.ttf */,
+				819F00712E096D8C00558D8D /* MaterialIcons.ttf */,
+				819F006F2E096D5900558D8D /* Ionicons.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -72,6 +85,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				81FF84E02E095FFA00B08CEB /* Fonts */,
 				8151AFD62E057C3200453B3D /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* shopme_mobile */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,

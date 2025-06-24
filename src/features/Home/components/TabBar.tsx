@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {Dimensions} from 'react-native';
 import styled from 'styled-components/native';
-import {TabBarProps} from 'types/types';
+
+import {TabBarProps} from '../../../types/types';
 
 const {width} = Dimensions.get('window');
 
@@ -19,21 +20,25 @@ const {width} = Dimensions.get('window');
  * @returns {React.ReactElement}
  */
 const TabBar = React.memo(({navigationState, jumpTo}: TabBarProps) => {
+  const renderTab = useCallback(
+    (route: {key: string; title: string}, index: number) => {
+      const isActive = navigationState.index === index;
+      const onPress = () => jumpTo(route.key);
+
+      return (
+        <TabItem key={route.key}>
+          <TabTitle isActive={isActive} onPress={onPress}>
+            {route.title}
+          </TabTitle>
+          <TabDivider isActive={isActive} />
+        </TabItem>
+      );
+    },
+    [navigationState.index, jumpTo],
+  );
   return (
     <TabContainer>
-      {navigationState.routes?.map(
-        (route: {key: string; title: string}, i: number) => {
-          const isActive = navigationState.index === i;
-          return (
-            <TabItem key={route.key}>
-              <TabTitle isActive={isActive} onPress={() => jumpTo(route.key)}>
-                {route.title}
-              </TabTitle>
-              <TabDivider isActive={isActive} />
-            </TabItem>
-          );
-        },
-      )}
+      {navigationState.routes.map(renderTab)}
       <Divider />
     </TabContainer>
   );

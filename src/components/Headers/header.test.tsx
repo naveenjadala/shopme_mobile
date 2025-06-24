@@ -1,4 +1,5 @@
 import {screen} from '@testing-library/react-native';
+
 import {customRender} from '../../utils/test-utils';
 import Header from './Header';
 

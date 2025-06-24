@@ -1,48 +1,21 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {memo, useCallback, useState} from 'react';
-import {
-  Dimensions,
-  FlatList,
-  ListRenderItem,
-  TouchableOpacity,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
+import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import React, {useCallback} from 'react';
 import styled from 'styled-components/native';
 
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {FavStackParamList} from 'navigation/FavStackNavigator';
-import {Product} from 'types/types';
+import CustomFlatList from '../../../components/flatList/CustomFlatList';
 import Header from '../../../components/Headers/Header';
-import {useGetFavoritesQuery} from '../favoritesApi';
-import {ItemProps} from '../types';
+import {BottomTabParamList} from '../../../navigation/BottomTabs';
+import {HomeStackParamList} from '../../../navigation/HomeStackNavigator';
+import {Product} from '../../../types/types';
+import {ProductItem} from '../components/ProductItem';
+import {useGetFavoritesQuery, useRemoveFavoriteMutation} from '../favoritesApi';
 
-const {width} = Dimensions.get('screen');
-
-const ProductItem = memo(({item, goToDetails}: ItemProps) => {
-  const [isFav, setIsFav] = useState(true);
-  const toggleFav = () => setIsFav(!isFav);
-  const details = () => goToDetails(item.id);
-
-  return (
-    <CardTouchable onPress={details}>
-      <ProductCard>
-        <ImageWrapper>
-          <ProductImage source={{uri: item.images[0]}} resizeMode="cover" />
-          <FavIcon onPress={toggleFav}>
-            <Icon
-              name={isFav ? 'heart' : 'heart-outline'}
-              size={20}
-              color={isFav ? 'black' : 'gray'}
-            />
-          </FavIcon>
-        </ImageWrapper>
-        <ProductInfo>
-          <ProductTitle numberOfLines={1}>{item.title}</ProductTitle>
-        </ProductInfo>
-      </ProductCard>
-    </CardTouchable>
-  );
-});
+type NavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<BottomTabParamList, 'Home'>,
+  NativeStackNavigationProp<HomeStackParamList>
+>;
 
 /**
  * Favorites component renders a list of favorite products.
@@ -53,36 +26,58 @@ const ProductItem = memo(({item, goToDetails}: ItemProps) => {
  *
  * @returns JSX.Element
  */
-
 const Favorites = () => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<FavStackParamList>>();
+  const navigation = useNavigation<NavigationProp>();
 
   const {data: favData, isLoading} = useGetFavoritesQuery();
 
-  const goToDetails = (id: number) => {
-    navigation.navigate('ProductDetails', {id: id});
-  };
+  const [removeFavorite, {isLoading: removeLoading}] =
+    useRemoveFavoriteMutation();
 
-  const renderProductItem: ListRenderItem<Product> = useCallback(
-    ({item}) => <ProductItem item={item} goToDetails={goToDetails} />,
-    [goToDetails],
+  const goToDetails = useCallback(
+    (id: number) => {
+      navigation.navigate('ProductDetails', {id});
+    },
+    [navigation],
   );
 
-  if (isLoading) {
-    return <Header title="Favorites" isBackButton={false} />;
-  }
+  const removeFav = useCallback(
+    (id: number) => {
+      removeFavorite(id.toString());
+    },
+    [removeFavorite],
+  );
+
+  const renderProductItem = useCallback(
+    ({item}: {item: Product}) => (
+      <ProductItem
+        item={item}
+        goToDetails={goToDetails}
+        isFav={true}
+        setFav={removeFav}
+      />
+    ),
+    [goToDetails, removeFav],
+  );
+
+  const keyExtractor = useCallback((item: Product) => item.id.toString(), []);
+
+  const goHome = () => {
+    navigation.reset({index: 0, routes: [{name: 'Home'}]});
+  };
 
   return (
     <Container>
       <Header title="Favorites" isBackButton={false} />
-      <FlatList
-        data={favData}
-        keyExtractor={item => item.id.toString()}
-        contentContainerStyle={{paddingBottom: 50}}
+      <CustomFlatList
+        data={favData || []}
         renderItem={renderProductItem}
+        keyExtractor={keyExtractor}
         numColumns={2}
         showsVerticalScrollIndicator={false}
+        onEndReachedThreshold={0.5}
+        goHome={goHome}
+        contentContainerStyle={{flexGrow: 1}}
       />
     </Container>
   );
@@ -92,45 +87,4 @@ export default Favorites;
 
 const Container = styled.View`
   flex: 1;
-`;
-
-const CardTouchable = styled(TouchableOpacity)`
-  flex: 1;
-`;
-
-const ProductCard = styled.View`
-  width: ${width / 2 - 4}px;
-  overflow: hidden;
-`;
-
-const ProductImage = styled.Image`
-  width: 100%;
-  height: 200px;
-`;
-
-const ProductInfo = styled.View`
-  padding: 10px;
-`;
-
-const ProductTitle = styled.Text`
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 4px;
-  color: ${({theme}) => theme.colors.textPrimary};
-`;
-
-const ImageWrapper = styled.View`
-  width: ${width / 2}px;
-  height: 200px;
-  position: relative;
-  overflow: hidden;
-`;
-
-const FavIcon = styled.TouchableOpacity`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 3px;
-  border-radius: 20px;
-  background-color: rgba(255, 255, 255, 0.8);
 `;

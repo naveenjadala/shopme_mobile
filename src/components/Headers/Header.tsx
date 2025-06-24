@@ -43,7 +43,6 @@ const Container = styled.View`
   flex-direction: row;
   align-items: center;
   height: 60px;
-  padding-horizontal: 10px;
 `;
 
 const Left = styled.View`

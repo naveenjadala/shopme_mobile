@@ -1,22 +1,19 @@
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import React, {useCallback} from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  ListRenderItem,
-  ScrollView,
-} from 'react-native';
+import {FlatList, ListRenderItem, ScrollView} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
 
-import {getAuth} from '@react-native-firebase/auth';
-import {doc, setDoc} from '@react-native-firebase/firestore';
 import Button from '../../../components/buttons/Button';
 import Header from '../../../components/Headers/Header';
 import Spacing from '../../../components/Spacing';
-import {db} from '../../../firebase/firebaseConfig';
-import {useGetProductByIdQuery} from '../productsApi';
-import {ProductDetailRouteParams} from '../types';
+import {useRemoveFavoriteMutation} from '../../../features/Favorites/favoritesApi';
+import {useFavorites} from '../../../hooks/useFavorites';
+import {
+  useAddToFavoritesMutation,
+  useGetProductByIdQuery,
+} from '../productsApi';
+import {ProductDetailRouteParams, ProductDetailsProps} from '../types';
 
 /**
  * ProductDetails is a screen that shows the details of a product.
@@ -32,11 +29,15 @@ const ProductDetails = () => {
       RouteProp<{ProductDetail: ProductDetailRouteParams}, 'ProductDetail'>
     >();
   const productId = route.params?.id || 0;
-  console.log(productId, 'productId');
+
+  const {favorites, loading: favLoading, refetch} = useFavorites();
 
   const {data: product, isLoading} = useGetProductByIdQuery({
     productId: productId,
   });
+
+  const [addToFavorites, {}] = useAddToFavoritesMutation();
+  const [removeFavorite, {}] = useRemoveFavoriteMutation();
 
   const renderSizeItem: ListRenderItem<string> = useCallback(
     ({item}) => (
@@ -47,48 +48,26 @@ const ProductDetails = () => {
     [],
   );
 
-  // const fav = async product => {
-  //   const userId = getAuth().currentUser?.uid;
-  //   console.log(userId, 'userId');
+  const removeFav = useCallback(() => {
+    removeFavorite(productId.toString());
+  }, [removeFavorite]);
 
-  //   if (!userId) return;
-  //   const favoritesRef = doc(db, 'users', userId, 'favorites', product.id);
-  //   console.log('Product added to favorites successfully!', favoritesRef);
-  //   await setDoc(favoritesRef, {
-  //     ...product,
-  //     addedAt: new Date(),
-  //   });
-  //   console.log('Product added to favorites successfully!');
-  // };
+  const isFav = favorites.includes(productId.toString());
 
-  async function addToFavorites(item) {
-    try {
-      const userId = getAuth().currentUser?.uid;
-      console.log(userId, 'userId');
+  const updateFav = useCallback(() => {
+    console.log('updateFav', isFav);
 
-      if (!userId) return;
-      console.log(item, 'item');
-
-      const favoritesRef = doc(
-        db,
-        'users',
-        userId,
-        'favorites',
-        item.id.toString(),
-      );
-      await setDoc(favoritesRef, {
-        ...item,
-        addedAt: new Date(),
-      });
-      console.log('Added to favorites!');
-    } catch (error) {
-      console.error('Error adding to favorites:', error);
+    if (isFav) {
+      removeFav();
+    } else {
+      addToFavorites(product as ProductDetailsProps);
     }
-  }
 
-  if (isLoading) {
-    return <ActivityIndicator size="large" color="#000" />;
-  }
+    setTimeout(() => {
+      console.log('refetch');
+      refetch();
+    }, 200);
+  }, [addToFavorites, isFav, productId, removeFav, product]);
 
   return (
     <Container>
@@ -125,10 +104,14 @@ const ProductDetails = () => {
           <Button
             title="Wishlist"
             type="secondary"
-            icon={<Icon name="heart-outline" size={20} color="#111" />}
-            onPress={() => {
-              addToFavorites(product);
-            }}
+            icon={
+              isFav ? (
+                <Icon name="heart" size={20} color="#111" />
+              ) : (
+                <Icon name="heart-outline" size={20} color="#111" />
+              )
+            }
+            onPress={updateFav}
             iconPosition="right"
           />
           <Spacing height={20} />

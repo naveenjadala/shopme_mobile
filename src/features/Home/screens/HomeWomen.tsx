@@ -3,6 +3,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {HomeStackParamList} from 'navigation/HomeStackNavigator';
 import React from 'react';
 import {ScrollView} from 'react-native';
+
 import img1 from '../../../asserts/images/img1.png';
 import img2 from '../../../asserts/images/img2.png';
 import img3 from '../../../asserts/images/img3.png';

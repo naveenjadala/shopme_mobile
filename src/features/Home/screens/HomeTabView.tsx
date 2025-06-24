@@ -2,7 +2,8 @@ import React, {useCallback} from 'react';
 import {useWindowDimensions} from 'react-native';
 import {SceneMap, TabView} from 'react-native-tab-view';
 import styled from 'styled-components/native';
-import {TabBarProps} from 'types/types';
+
+import {TabBarProps} from '../../../types/types';
 import {TabBar} from '../components';
 import HomeKids from './HomeKids';
 import HomeMen from './HomeMen';
@@ -65,6 +66,6 @@ const Container = styled.View`
 const Title = styled.Text`
   font-size: 24px;
   font-weight: 500;
-  padding: 15px;
+  padding: 0px 0px 15px 15px;
   color: ${({theme}) => theme.colors.black};
 `;

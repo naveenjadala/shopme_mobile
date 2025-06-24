@@ -1,9 +1,11 @@
 import {
   collection,
+  doc,
   getDocs,
   limit,
   orderBy,
   query,
+  setDoc,
   startAfter,
   where,
 } from '@react-native-firebase/firestore';
@@ -13,6 +15,7 @@ import {
   QueryReturnValue,
 } from '@reduxjs/toolkit/query';
 
+import {getAuth} from '@react-native-firebase/auth';
 import {db} from '../../firebase/firebaseConfig';
 import {baseApi} from '../../services';
 import {CategoryFilter, Product} from '../../types/types';
@@ -100,6 +103,8 @@ const productsApi = baseApi.injectEndpoints({
             };
           });
 
+          console.log('products', products);
+
           return {
             data: {
               products: products,
@@ -116,6 +121,7 @@ const productsApi = baseApi.injectEndpoints({
           };
         }
       },
+      providesTags: ['Product', 'Favorites'],
     }),
     getProductById: builder.query<ProductDetailsProps, {productId: number}>({
       queryFn: async ({
@@ -175,8 +181,54 @@ const productsApi = baseApi.injectEndpoints({
           };
         }
       },
+      providesTags: ['Product', 'Favorites'],
+    }),
+    addToFavorites: builder.mutation<string, ProductDetailsProps>({
+      queryFn: async (
+        item: ProductDetailsProps,
+      ): Promise<
+        QueryReturnValue<string, FetchBaseQueryError, FetchBaseQueryMeta>
+      > => {
+        try {
+          const userId = getAuth().currentUser?.uid;
+          if (!userId) {
+            return {
+              error: {
+                status: 401,
+                data: 'User not authenticated',
+              },
+            };
+          }
+          const favoritesRef = doc(
+            db,
+            'users',
+            userId,
+            'favorites',
+            item.id.toString(),
+          );
+          const docRef = await setDoc(favoritesRef, {
+            ...item,
+            addedAt: new Date(),
+          });
+          console.log('Added to favorites!', docRef);
+
+          return {data: ''};
+        } catch (error: any) {
+          return {
+            error: {
+              status: error.code || 500,
+              data: error.message,
+            },
+          };
+        }
+      },
+      invalidatesTags: ['Favorites'],
     }),
   }),
 });
 
-export const {useGetAllProductsQuery, useGetProductByIdQuery} = productsApi;
+export const {
+  useGetAllProductsQuery,
+  useGetProductByIdQuery,
+  useAddToFavoritesMutation,
+} = productsApi;

@@ -1,13 +1,21 @@
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {CartStackParamList} from 'navigation/CartStackNavigator';
+import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
 import styled from 'styled-components/native';
 
+import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {BottomTabParamList} from 'navigation/BottomTabs';
+import {HomeStackParamList} from 'navigation/HomeStackNavigator';
 import Button from '../../components/buttons/Button';
+import EmptyListState from '../../components/emptyState/EmptyListState';
 import Header from '../../components/Headers/Header';
 import {useGetCartItemsQuery} from './cartApi';
 import CartList from './components/CartList';
+
+type NavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<BottomTabParamList, 'Home'>,
+  NativeStackNavigationProp<HomeStackParamList>
+>;
 
 /**
  * Renders the Cart screen with a list of cart items and a checkout button.
@@ -19,14 +27,24 @@ import CartList from './components/CartList';
  */
 
 const Cart = () => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<CartStackParamList>>();
+  const navigation = useNavigation<NavigationProp>();
 
   const {data: cartData} = useGetCartItemsQuery();
 
   const productDetails = (itemId: number) => {
     navigation.navigate({name: 'ProductDetails', params: {id: itemId}});
   };
+
+  if (!cartData) {
+    return (
+      <EmptyListState
+        message="You have no products yet in your cart"
+        isIcon={true}
+        icon="cart-outline"
+        onPress={() => navigation.navigate({name: 'Home', params: {}})}
+      />
+    );
+  }
 
   return (
     <Container>
@@ -35,7 +53,7 @@ const Cart = () => {
       <Button
         title="Checkout"
         type="primary"
-        onPress={() => navigation.navigate('Checkout')}
+        onPress={() => navigation.navigate({name: 'Checkout'})}
         style={{margin: 15}}
       />
     </Container>

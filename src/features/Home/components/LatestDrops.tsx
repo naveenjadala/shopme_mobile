@@ -2,11 +2,13 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {HomeStackParamList} from 'navigation/HomeStackNavigator';
 import React, {useCallback} from 'react';
-import {Dimensions, FlatList, ListRenderItem} from 'react-native';
+import {Dimensions, FlatList} from 'react-native';
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import styled from 'styled-components/native';
-import {Product} from 'types/types';
+
 import Button from '../../../components/buttons/Button';
+import CustomFlatList from '../../../components/flatList/CustomFlatList';
+import {Product} from '../../../types/types';
 import HomeProductCard from './HomeProductCard';
 
 const {width} = Dimensions.get('window');
@@ -49,12 +51,14 @@ const LatestDrops: React.FC<Props> = ({latestData, goToProducts, loading}) => {
     </ContainerCard>
   );
 
-  const renderProductCard: ListRenderItem<Product> = useCallback(
-    ({item}) => (
+  const renderProductCard = useCallback(
+    ({item}: {item: Product}) => (
       <HomeProductCard item={item} getProductDetails={handleProductDetails} />
     ),
     [handleProductDetails],
   );
+
+  const keyExtractor = (item: Product) => item.id.toString();
 
   if (loading) {
     return (
@@ -74,17 +78,15 @@ const LatestDrops: React.FC<Props> = ({latestData, goToProducts, loading}) => {
   return (
     <Container>
       <Title>Latest Drops</Title>
-      <FlatList
+      <CustomFlatList
         data={latestData}
-        keyExtractor={item => item.id.toString()}
-        contentContainerStyle={{
-          paddingRight: CARD_SPACING,
-          justifyContent: 'center',
-          alignSelf: 'center',
-        }}
         renderItem={renderProductCard}
+        keyExtractor={keyExtractor}
         numColumns={NUM_COLUMNS}
+        showsVerticalScrollIndicator={false}
+        onEndReachedThreshold={0.5}
         scrollEnabled={false}
+        contentContainerStyle={listContainer as any}
       />
       <StyledViewAllButton
         onPress={goToProducts}
@@ -96,6 +98,12 @@ const LatestDrops: React.FC<Props> = ({latestData, goToProducts, loading}) => {
 };
 
 export default LatestDrops;
+
+const listContainer = {
+  alignSelf: 'center',
+  justifyContent: 'center',
+  paddingRight: CARD_SPACING,
+};
 
 const Container = styled.View`
   flex: 1;

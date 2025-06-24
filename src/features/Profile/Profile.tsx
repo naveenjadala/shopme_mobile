@@ -36,7 +36,6 @@ const OptionItem = React.memo(
 const Profile = () => {
   const [logOut, {isLoading, error, isSuccess}] = useLogoutMutation();
   const user = getAuth().currentUser;
-  console.log(user);
 
   const handlePress = useCallback((label: string) => {
     if (label === 'Logout') {
@@ -83,7 +82,12 @@ const ProfileCard = styled.View`
   padding: 20px;
   margin: 15px;
   border-radius: 10px;
-  elevation: 2;
+  elevation: 1;
+  background-color: ${({theme}) => theme.colors.background};
+  shadow-color: ${({theme}) => theme.colors.shadow};
+  shadow-offset: 0 2px;
+  shadow-opacity: 0.1;
+  shadow-radius: 3.84px;
 `;
 
 const ProfileImage = styled.Image`
@@ -110,7 +114,12 @@ const OptionsCard = styled.View`
   margin: 15px;
   border-radius: 10px;
   gap: 30px;
-  elevation: 2;
+  elevation: 1;
+  background-color: ${({theme}) => theme.colors.background};
+  shadow-color: ${({theme}) => theme.colors.shadow};
+  shadow-offset: 0 2px;
+  shadow-opacity: 0.1;
+  shadow-radius: 3.84px;
 `;
 
 const OptionTouchable = styled.TouchableOpacity`

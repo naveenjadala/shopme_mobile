@@ -20,6 +20,7 @@ declare module 'styled-components/native' {
       inputBorder?: string;
       placeholder?: string;
       icon?: string;
+      shadow?: string;
     };
     spacing: {
       xs: number;
@@ -47,7 +48,6 @@ declare module 'styled-components/native' {
   }
 }
 
-// 2. Create shared constants for values used in both themes
 const SHARED_SPACING = {
   xs: 4,
   sm: 8,
@@ -71,7 +71,6 @@ const SHARED_RADIUS = {
   lg: 12,
 };
 
-// 3. Light theme configuration
 export const lightTheme: DefaultTheme = {
   colors: {
     background: '#FFFFFF',
@@ -89,13 +88,13 @@ export const lightTheme: DefaultTheme = {
     textSecondary: '#FFFFFF',
     inputBorder: '#DDDDDD',
     placeholder: '#999999',
+    shadow: '#000000',
   },
   spacing: SHARED_SPACING,
   fontSize: SHARED_FONT_SIZES,
   borderRadius: SHARED_RADIUS,
 };
 
-// 4. Dark theme configuration
 export const darkTheme: DefaultTheme = {
   colors: {
     background: '#000000',
@@ -113,6 +112,7 @@ export const darkTheme: DefaultTheme = {
     textSecondary: '#000000',
     inputBorder: '#555555',
     placeholder: '#CCCCCC',
+    shadow: '#000000',
   },
   spacing: SHARED_SPACING,
   fontSize: SHARED_FONT_SIZES,

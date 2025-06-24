@@ -1,6 +1,8 @@
 import {getAuth} from '@react-native-firebase/auth';
 import {
   collection,
+  deleteDoc,
+  doc,
   getDocs,
   orderBy,
   query,
@@ -13,8 +15,6 @@ import {
 import {db} from '../../firebase/firebaseConfig';
 import {baseApi} from '../../services';
 import {Product} from '../../types/types';
-
-type FavoritesTag = {type: 'Favorites'; id: number | 'LIST'};
 
 const favoritesApi = baseApi.injectEndpoints({
   endpoints: builder => ({
@@ -63,8 +63,39 @@ const favoritesApi = baseApi.injectEndpoints({
           };
         }
       },
+      providesTags: ['Favorites'],
+    }),
+    removeFavorite: builder.mutation<string, string>({
+      queryFn: async (
+        id: string,
+      ): Promise<
+        QueryReturnValue<string, FetchBaseQueryError, FetchBaseQueryMeta>
+      > => {
+        try {
+          const userId = getAuth().currentUser?.uid;
+          if (!userId) {
+            return {
+              error: {
+                status: 401,
+                data: 'User not authenticated',
+              },
+            };
+          }
+          const favoriteRef = doc(db, 'users', userId, 'favorites', id);
+          await deleteDoc(favoriteRef);
+          return {data: 'Favorite removed successfully'};
+        } catch (error: any) {
+          return {
+            error: {
+              status: error.code || 500,
+              data: error.message,
+            },
+          };
+        }
+      },
+      invalidatesTags: ['Favorites'],
     }),
   }),
 });
 
-export const {useGetFavoritesQuery} = favoritesApi;
+export const {useGetFavoritesQuery, useRemoveFavoriteMutation} = favoritesApi;

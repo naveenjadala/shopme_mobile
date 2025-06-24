@@ -1,6 +1,5 @@
 import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {SafeAreaView} from 'react-native';
 import {useAuth} from '../context/AuthProvider';
 import Checkout from '../features/Checkout/Checkout';
 import OrderSuccess from '../features/OrderSuccess/OrderSuccess';
@@ -37,20 +36,18 @@ const AppNavigator = () => {
   if (loading) return null;
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <NavigationContainer theme={navigationTheme}>
-        {user ? (
-          <Stack.Navigator screenOptions={{headerShown: false}}>
-            <Stack.Screen name="Tabs" component={BottomTabs} />
-            <Stack.Screen name="Product" component={ProductsList} />
-            <Stack.Screen name="Checkout" component={Checkout} />
-            <Stack.Screen name="OrderSuccess" component={OrderSuccess} />
-          </Stack.Navigator>
-        ) : (
-          <AuthNavigator />
-        )}
-      </NavigationContainer>
-    </SafeAreaView>
+    <NavigationContainer theme={navigationTheme}>
+      {user ? (
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+          <Stack.Screen name="Tabs" component={BottomTabs} />
+          <Stack.Screen name="Product" component={ProductsList} />
+          <Stack.Screen name="Checkout" component={Checkout} />
+          <Stack.Screen name="OrderSuccess" component={OrderSuccess} />
+        </Stack.Navigator>
+      ) : (
+        <AuthNavigator />
+      )}
+    </NavigationContainer>
   );
 };
 
