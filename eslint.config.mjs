@@ -82,7 +82,8 @@ export default [
       'react/prop-types': 'off',
       '@typescript-eslint/no-use-before-define': 'off',
       'object-curly-newline': 'off',
-      'arrow-parens': 'off'
+      'arrow-parens': 'off',
+      'no-underscore-dangle': 'off',
     },
   },
 ];

@@ -28,7 +28,7 @@ export interface Product {
   image: string;
   iconImg: string;
   addedAt?: string;
-  createdAt?: string;
+  createdAt?: { _seconds: number; _nanoseconds: number } | string;
 }
 
 export type CategoryFilter = {

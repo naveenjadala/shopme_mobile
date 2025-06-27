@@ -22,7 +22,7 @@ import { CategoryFilter, Product } from '../../types/types';
 import { ProductDetailsProps } from './types';
 
 const productsApi = baseApi.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     getAllProducts: builder.query<
     { products: Product[]; hasMore: boolean; pageNo: number },
     { pageNo: number; pageSize: number; categoryFilter?: CategoryFilter }
@@ -93,15 +93,17 @@ const productsApi = baseApi.injectEndpoints({
           const finalQuery = query(baseQuery, limit(pageSize));
           const snapshot = await getDocs(finalQuery);
 
-          const products = snapshot.docs.map((value) => {
+          const products = snapshot.docs.map(value => {
             const data = value.data() as Product;
             return {
               ...data,
-              createdAt: data.createdAt
-                ? new Date(data.createdAt).toISOString()
-                : '',
+              createdAt:
+                data.createdAt && typeof data.createdAt === 'object'
+                  ? new Date(data.createdAt._seconds * 1000).toDateString()
+                  : data.createdAt || '',
             };
           });
+          console.log(products, 'products');
 
           return {
             data: {
@@ -157,21 +159,20 @@ const productsApi = baseApi.injectEndpoints({
               },
             };
           }
-
-          // const docData = querySnapshot.docs[0];
-          // const productData = docData.data();
           const docData = querySnapshot.docs[0];
-          const productData = docData.data() as ProductDetailsProps & {
-            createdAt?: { toDate: () => Date };
-          };
+          const productData = docData.data() as ProductDetailsProps;
 
           return {
             data: {
-              ...(productData as ProductDetailsProps),
+              ...(productData),
               id: productData.id,
               createdAt:
-                productData.createdAt?.toDate().toISOString()
-                ?? new Date().toISOString(),
+                productData.createdAt
+                && typeof productData.createdAt === 'object'
+                  ? new Date(
+                    productData.createdAt._seconds * 1000,
+                  ).toDateString()
+                  : productData.createdAt || '',
             },
           };
         } catch (error: unknown) {

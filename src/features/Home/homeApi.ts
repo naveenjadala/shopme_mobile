@@ -17,7 +17,7 @@ import { CategoryFilter, Product } from '../../types/types';
 import { CategoryData, LatestData, PromotionBanner } from './types';
 
 export const homeApi = baseApi.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     getMenTab: builder.query<CategoryData, void>({
       query: () => 'mensTab',
     }),
@@ -28,7 +28,7 @@ export const homeApi = baseApi.injectEndpoints({
       query: () => 'kidsTab',
     }),
     getLatestDrops: builder.query<LatestData[], Record<string, unknown>>({
-      query: (params) => {
+      query: params => {
         const queryString = new URLSearchParams();
         Object.entries(params || {}).forEach(([key, value]) => {
           if (value !== undefined && value !== null) {
@@ -67,14 +67,17 @@ export const homeApi = baseApi.injectEndpoints({
           }
 
           // Process documents
-          const featured: PromotionBanner[] = querySnapshot.docs.map((doc) => {
-            // const data = doc.data() as PromotionBanner;
-            const productData = doc.data() as PromotionBanner & {
-              createdAt?: { toDate: () => Date };
-            };
+          const featured: PromotionBanner[] = querySnapshot.docs.map(doc => {
+            const productData = doc.data() as PromotionBanner;
             return {
               ...productData,
-              createdAt: productData.createdAt?.toDate().toISOString(),
+              createdAt:
+                productData.createdAt
+                && typeof productData.createdAt === 'object'
+                  ? new Date(
+                    productData.createdAt._seconds * 1000,
+                  ).toDateString()
+                  : productData.createdAt || '',
             };
           });
           return featured.length > 0 ? { data: featured } : { data: [] };
@@ -119,14 +122,17 @@ export const homeApi = baseApi.injectEndpoints({
 
           const snapshot = await getDocs(baseQuery);
 
-          const products = snapshot.docs.map((doc) => {
-            // const data = doc.data();
-            const productData = doc.data() as PromotionBanner & {
-              createdAt?: { toDate: () => Date };
-            };
+          const products = snapshot.docs.map(doc => {
+            const productData = doc.data() as PromotionBanner;
             return {
               ...productData,
-              createdAt: productData.createdAt?.toDate().toISOString(),
+              createdAt:
+                productData.createdAt
+                && typeof productData.createdAt === 'object'
+                  ? new Date(
+                    productData.createdAt._seconds * 1000,
+                  ).toDateString()
+                  : productData.createdAt || '',
             };
           });
 

@@ -17,7 +17,7 @@ import { baseApi } from '../../services';
 import { Product } from '../../types/types';
 
 const favoritesApi = baseApi.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     getFavorites: builder.query<Product[], void>({
       queryFn: async (): Promise<
       QueryReturnValue<
@@ -44,14 +44,17 @@ const favoritesApi = baseApi.injectEndpoints({
 
           const snapshot = await getDocs(q);
 
-          const favorites = snapshot.docs.map((value) => {
-            // const data = value.data();
-            const productData = value.data() as Product & {
-              createdAt?: { toDate: () => Date };
-            };
+          const favorites = snapshot.docs.map(value => {
+            const productData = value.data() as Product;
             return {
               ...productData,
-              addedAt: productData.createdAt?.toDate().toISOString(),
+              addedAt:
+                productData.createdAt
+                && typeof productData.createdAt === 'object'
+                  ? new Date(
+                    productData.createdAt._seconds * 1000,
+                  ).toDateString()
+                  : productData.createdAt || '',
             };
           });
 
