@@ -5,19 +5,18 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {HomeStackParamList} from 'navigation/HomeStackNavigator';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {ActivityIndicator} from 'react-native';
-import styled from 'styled-components/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { ActivityIndicator } from 'react-native';
 
-import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
-import {BottomTabParamList} from 'navigation/BottomTabs';
+import useFavorites from '@hooks/useFavorites';
+import { BottomTabParamList, HomeStackParamList } from '@navigation/types';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { Container } from '@theme/globalStyles';
 import CustomFlatList from '../../../components/flatList/CustomFlatList';
 import Header from '../../../components/Headers/Header';
-import {useRemoveFavoriteMutation} from '../../../features/Favorites/favoritesApi';
-import {useFavorites} from '../../../hooks/useFavorites';
-import {CategoryFilter, Product} from '../../../types/types';
+import { CategoryFilter, Product } from '../../../types/types';
+import { useRemoveFavoriteMutation } from '../../Favorites/favoritesApi';
 import ProductItem from '../components/ProductItem';
 import {
   useAddToFavoritesMutation,
@@ -25,9 +24,13 @@ import {
 } from '../productsApi';
 
 type NavigationProp = CompositeNavigationProp<
-  BottomTabNavigationProp<BottomTabParamList, 'Home'>,
-  NativeStackNavigationProp<HomeStackParamList>
+BottomTabNavigationProp<BottomTabParamList, 'Home'>,
+NativeStackNavigationProp<HomeStackParamList>
 >;
+
+type ItemProps = {
+  item: Product;
+};
 
 /**
  * Renders a list of products with a header that allows the user to go back to the previous screen.
@@ -42,30 +45,25 @@ const ProductsList = () => {
 
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [page, setPage] = useState(1);
-  const [userFilters, setUserFilters] = useState<CategoryFilter>({});
+  const [userFilters] = useState<CategoryFilter>({});
 
-  const routeParams = route.params ?? {};
+  // const routeParams = route.params ?? {};
+  const routeParams = useMemo(() => route?.params || {}, [route?.params]);
   const pageSize = 10;
   const filters = useMemo(
     () => ({
       pageNo: page,
       pageSize,
-      categoryFilter: {...routeParams, ...userFilters},
+      categoryFilter: { ...routeParams, ...userFilters },
     }),
     [page, pageSize, userFilters, routeParams],
   );
 
-  const {
-    favorites,
-    loading: favLoading,
-    refetch: refetchFavorites,
-  } = useFavorites();
-  const {data, isFetching, isLoading, isError, error} =
-    useGetAllProductsQuery(filters);
+  const { favorites, refetch: refetchFavorites } = useFavorites();
+  const { data, isFetching } = useGetAllProductsQuery(filters);
 
-  const [removeFavorite, {isLoading: removeLoading}] =
-    useRemoveFavoriteMutation();
-  const [addToFavorites, {isLoading: addLoading}] = useAddToFavoritesMutation();
+  const [removeFavorite] = useRemoveFavoriteMutation();
+  const [addToFavorites] = useAddToFavoritesMutation();
 
   useFocusEffect(
     useCallback(() => {
@@ -103,15 +101,13 @@ const ProductsList = () => {
   };
 
   const isFav = useCallback(
-    (id: number) => {
-      return favorites.includes(id.toString());
-    },
-    [favorites, removeFavorite, addToFavorites],
+    (id: number) => favorites.includes(id.toString()),
+    [favorites],
   );
 
   const goToDetails = useCallback(
     (id: number) => {
-      navigation.navigate('ProductDetails', {id: id});
+      navigation.navigate('ProductDetails', { id });
     },
     [navigation],
   );
@@ -145,7 +141,7 @@ const ProductsList = () => {
   );
 
   const renderProductItem = useCallback(
-    ({item}: {item: Product}) => (
+    ({ item }: ItemProps) => (
       <ProductItem
         item={item}
         goToDetails={goToDetails}
@@ -166,7 +162,7 @@ const ProductsList = () => {
   };
 
   const goHome = () => {
-    navigation.reset({index: 0, routes: [{name: 'Home'}]});
+    navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
   };
 
   return (
@@ -188,7 +184,3 @@ const ProductsList = () => {
 };
 
 export default ProductsList;
-
-const Container = styled.View`
-  flex: 1;
-`;

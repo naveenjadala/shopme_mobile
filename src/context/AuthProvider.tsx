@@ -1,14 +1,15 @@
-// src/context/AuthProvider.tsx
-import {getApp} from '@react-native-firebase/app';
+import { getApp } from '@react-native-firebase/app';
 import {
   FirebaseAuthTypes,
   getAuth,
   onAuthStateChanged,
 } from '@react-native-firebase/auth';
-import React, {createContext, useEffect, useState} from 'react';
+import React, {
+  createContext, useEffect, useMemo, useState,
+} from 'react';
 
 interface AuthContextType {
-  user: any; // Replace with your User type
+  user: FirebaseAuthTypes.User | null;
   loading: boolean;
 }
 
@@ -17,13 +18,13 @@ export const AuthContext = createContext<AuthContextType>({
   loading: true,
 });
 
-export function AuthProvider({children}: {children: React.ReactNode}) {
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const auth = getAuth(getApp());
-    const subscriber = onAuthStateChanged(auth, currentUser => {
+    const subscriber = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
     });
@@ -31,11 +32,11 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
     return subscriber; // Unsubscribe on unmount
   }, []);
 
+  const contextValue = useMemo(() => ({ user, loading }), [user, loading]);
+
   return (
-    <AuthContext.Provider value={{user, loading}}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
-}
+};
 
 export const useAuth = () => React.useContext(AuthContext);

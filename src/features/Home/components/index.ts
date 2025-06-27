@@ -6,4 +6,6 @@ import TabBar from './TabBar';
 
 import HomeProductCard from './HomeProductCard';
 
-export {HomeProductCard, LatestDrops, NewFeatured, TabBar};
+export {
+  HomeProductCard, LatestDrops, NewFeatured, TabBar,
+};

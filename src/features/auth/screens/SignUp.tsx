@@ -1,14 +1,14 @@
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {AuthStackParamList} from 'navigation/AuthNavigator';
-import React, {useState} from 'react';
-import {Platform} from 'react-native';
+import React, { useState } from 'react';
+import { ImageURISource, Platform } from 'react-native';
 import styled from 'styled-components/native';
 
+import Button from '@components/buttons/Button';
+import PrimaryTextInput from '@components/textInputs/PrimaryTextInput';
+import { AuthStackParamList } from '@navigation/types';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Logo from '../../../asserts/images/logo.png';
-import Button from '../../../components/buttons/Button';
-import PrimaryTextInput from '../../../components/textInputs/PrimaryTextInput';
-import {useSignUpMutation} from '../authApi';
+import { useSignUpMutation } from '../authApi';
 import {
   AppLogo,
   Container,
@@ -20,17 +20,30 @@ import {
   Title,
 } from '../AuthSharedStyles';
 
+const inputStyle = {
+  height: 50,
+  borderWidth: 1,
+  borderRadius: 8,
+  paddingHorizontal: 15,
+  marginBottom: 15,
+  fontSize: 16,
+};
+
+const StyledButton = styled(Button)`
+  align-items: center;
+  margin-top: 15px;
+`;
+
 export default function SignUp() {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [signUp, {isLoading}] = useSignUpMutation();
+  const [signUp, { isLoading }] = useSignUpMutation();
 
   const handleSignup = async () => {
     try {
-      await signUp({name, email, password}).unwrap();
+      await signUp({ name, email, password }).unwrap();
     } catch (err) {
       console.error('Signup error:', err);
     }
@@ -39,7 +52,7 @@ export default function SignUp() {
   return (
     <Container behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <InnerContainer>
-        <AppLogo source={Logo} resizeMode="contain" />
+        <AppLogo source={Logo as ImageURISource} resizeMode="contain" />
 
         <Title>Create Account</Title>
         <Subtitle>Be Bold. Be Styled. Be You.</Subtitle>
@@ -78,24 +91,11 @@ export default function SignUp() {
 
         <LinkContainer onPress={() => navigation.navigate('Login')}>
           <LinkText>
-            Already have an account? <Link>Login</Link>
+            Already have an account?
+            <Link>Login</Link>
           </LinkText>
         </LinkContainer>
       </InnerContainer>
     </Container>
   );
 }
-
-const inputStyle = {
-  height: 50,
-  borderWidth: 1,
-  borderRadius: 8,
-  paddingHorizontal: 15,
-  marginBottom: 15,
-  fontSize: 16,
-};
-
-const StyledButton = styled(Button)`
-  align-items: center;
-  margin-top: 15px;
-`;

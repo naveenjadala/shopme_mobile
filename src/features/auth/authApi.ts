@@ -3,29 +3,31 @@ import {
   FirebaseAuthTypes,
   getAuth,
 } from '@react-native-firebase/auth';
-import {doc, setDoc} from '@react-native-firebase/firestore';
-import {db} from '../../firebase/firebaseConfig';
-import {baseApi} from '../../services';
+import { doc, setDoc } from '@react-native-firebase/firestore';
+import { db } from '../../firebase/firebaseConfig';
+import { baseApi } from '../../services';
 
 const authApi = baseApi.injectEndpoints({
-  endpoints: builder => ({
+  endpoints: (builder) => ({
     login: builder.mutation<
-      {user: {uid: string; email: string | null; displayName: string | null}},
-      {email: string; password: string}
+    {
+      user: { uid: string; email: string | null; displayName: string | null };
+    },
+    { email: string; password: string }
     >({
-      async queryFn({email, password}) {
+      async queryFn({ email, password }) {
         try {
           const userDetails = await getAuth().signInWithEmailAndPassword(
             email,
             password,
           );
-          const user = userDetails.user;
+          const { user } = userDetails;
           const safeUser = {
             uid: user.uid,
             email: user.email,
             displayName: user.displayName,
           };
-          return {data: {user: safeUser}};
+          return { data: { user: safeUser } };
         } catch (error) {
           return {
             error: {
@@ -38,10 +40,10 @@ const authApi = baseApi.injectEndpoints({
       },
     }),
     signUp: builder.mutation<
-      FirebaseAuthTypes.UserCredential,
-      {name: string; email: string; password: string}
+    FirebaseAuthTypes.UserCredential,
+    { name: string; email: string; password: string }
     >({
-      async queryFn({name, email, password}) {
+      async queryFn({ name, email, password }) {
         try {
           const auth = getAuth();
           const userDetails = await createUserWithEmailAndPassword(
@@ -49,17 +51,17 @@ const authApi = baseApi.injectEndpoints({
             email,
             password,
           );
-          const user = userDetails.user;
+          const { user } = userDetails;
           const userId = user.uid;
 
           await setDoc(doc(db, 'users', userId), {
-            email: email,
+            email,
             displayName: name,
             createdAt: new Date(),
             lastLogin: new Date(),
             isActive: true,
           });
-          return {data: userDetails};
+          return { data: userDetails };
         } catch (error) {
           return {
             error: {
@@ -74,4 +76,4 @@ const authApi = baseApi.injectEndpoints({
   }),
 });
 
-export const {useLoginMutation, useSignUpMutation} = authApi;
+export const { useLoginMutation, useSignUpMutation } = authApi;

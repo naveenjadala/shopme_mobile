@@ -1,6 +1,6 @@
-// src/redux/slices/authSlice.ts
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {User} from 'firebase/auth';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { User } from 'firebase/auth';
 
 interface AuthState {
   user: User | null;
@@ -30,5 +30,5 @@ const authSlice = createSlice({
   },
 });
 
-export const {setUser, setLoading, setError} = authSlice.actions;
+export const { setUser, setLoading, setError } = authSlice.actions;
 export default authSlice.reducer;

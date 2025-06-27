@@ -1,4 +1,4 @@
-import {getAuth} from '@react-native-firebase/auth';
+import { getAuth } from '@react-native-firebase/auth';
 import {
   collection,
   deleteDoc,
@@ -12,19 +12,19 @@ import {
   FetchBaseQueryMeta,
   QueryReturnValue,
 } from '@reduxjs/toolkit/query';
-import {db} from '../../firebase/firebaseConfig';
-import {baseApi} from '../../services';
-import {Product} from '../../types/types';
+import { db } from '../../firebase/firebaseConfig';
+import { baseApi } from '../../services';
+import { Product } from '../../types/types';
 
 const favoritesApi = baseApi.injectEndpoints({
-  endpoints: builder => ({
+  endpoints: (builder) => ({
     getFavorites: builder.query<Product[], void>({
       queryFn: async (): Promise<
-        QueryReturnValue<
-          Product[],
-          FetchBaseQueryError,
-          FetchBaseQueryMeta | undefined
-        >
+      QueryReturnValue<
+      Product[],
+      FetchBaseQueryError,
+      FetchBaseQueryMeta | undefined
+      >
       > => {
         try {
           const auth = getAuth();
@@ -44,21 +44,27 @@ const favoritesApi = baseApi.injectEndpoints({
 
           const snapshot = await getDocs(q);
 
-          const favorites = snapshot.docs.map(doc => {
-            const data = doc.data();
+          const favorites = snapshot.docs.map((value) => {
+            // const data = value.data();
+            const productData = value.data() as Product & {
+              createdAt?: { toDate: () => Date };
+            };
             return {
-              ...data,
-              addedAt: data.addedAt?.toDate()?.toISOString() || null,
+              ...productData,
+              addedAt: productData.createdAt?.toDate().toISOString(),
             };
           });
 
-          return {data: favorites as Product[]};
-        } catch (error: any) {
-          console.error('Failed to fetch favorites:', error);
+          return { data: favorites as Product[] };
+        } catch (error: unknown) {
+          const errorWithCode = error as { code: string; message: string };
           return {
             error: {
-              status: error.code || 500,
-              data: error.message || 'Unknown error occurred',
+              status: Number(errorWithCode?.code) || 500,
+              data: {
+                message: errorWithCode?.message,
+                code: errorWithCode?.code || 'INTERNAL_ERROR',
+              },
             },
           };
         }
@@ -69,7 +75,7 @@ const favoritesApi = baseApi.injectEndpoints({
       queryFn: async (
         id: string,
       ): Promise<
-        QueryReturnValue<string, FetchBaseQueryError, FetchBaseQueryMeta>
+      QueryReturnValue<string, FetchBaseQueryError, FetchBaseQueryMeta>
       > => {
         try {
           const userId = getAuth().currentUser?.uid;
@@ -83,12 +89,16 @@ const favoritesApi = baseApi.injectEndpoints({
           }
           const favoriteRef = doc(db, 'users', userId, 'favorites', id);
           await deleteDoc(favoriteRef);
-          return {data: 'Favorite removed successfully'};
-        } catch (error: any) {
+          return { data: 'Favorite removed successfully' };
+        } catch (error: unknown) {
+          const errorWithCode = error as { code: string; message: string };
           return {
             error: {
-              status: error.code || 500,
-              data: error.message,
+              status: Number(errorWithCode?.code) || 500,
+              data: {
+                message: errorWithCode?.message,
+                code: errorWithCode?.code || 'INTERNAL_ERROR',
+              },
             },
           };
         }
@@ -98,4 +108,4 @@ const favoritesApi = baseApi.injectEndpoints({
   }),
 });
 
-export const {useGetFavoritesQuery, useRemoveFavoriteMutation} = favoritesApi;
+export const { useGetFavoritesQuery, useRemoveFavoriteMutation } = favoritesApi;

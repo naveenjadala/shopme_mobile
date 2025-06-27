@@ -1,20 +1,25 @@
-import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
-import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import React, {useCallback} from 'react';
-import styled from 'styled-components/native';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import {
+  CompositeNavigationProp,
+  useNavigation,
+} from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React, { useCallback } from 'react';
 
-import CustomFlatList from '../../../components/flatList/CustomFlatList';
-import Header from '../../../components/Headers/Header';
-import {BottomTabParamList} from '../../../navigation/BottomTabs';
-import {HomeStackParamList} from '../../../navigation/HomeStackNavigator';
-import {Product} from '../../../types/types';
-import {ProductItem} from '../components/ProductItem';
-import {useGetFavoritesQuery, useRemoveFavoriteMutation} from '../favoritesApi';
+import CustomFlatList from '@components/flatList/CustomFlatList';
+import Header from '@components/Headers/Header';
+import { BottomTabParamList, HomeStackParamList } from '@navigation/types';
+import { Container } from '@theme/globalStyles';
+import { Product } from '../../../types/types';
+import { ProductItem } from '../components/ProductItem';
+import {
+  useGetFavoritesQuery,
+  useRemoveFavoriteMutation,
+} from '../favoritesApi';
 
 type NavigationProp = CompositeNavigationProp<
-  BottomTabNavigationProp<BottomTabParamList, 'Home'>,
-  NativeStackNavigationProp<HomeStackParamList>
+BottomTabNavigationProp<BottomTabParamList, 'Favorites'>,
+NativeStackNavigationProp<HomeStackParamList>
 >;
 
 /**
@@ -29,14 +34,13 @@ type NavigationProp = CompositeNavigationProp<
 const Favorites = () => {
   const navigation = useNavigation<NavigationProp>();
 
-  const {data: favData, isLoading} = useGetFavoritesQuery();
+  const { data: favData } = useGetFavoritesQuery();
 
-  const [removeFavorite, {isLoading: removeLoading}] =
-    useRemoveFavoriteMutation();
+  const [removeFavorite] = useRemoveFavoriteMutation();
 
   const goToDetails = useCallback(
     (id: number) => {
-      navigation.navigate('ProductDetails', {id});
+      navigation.navigate('ProductDetails', { id });
     },
     [navigation],
   );
@@ -49,11 +53,11 @@ const Favorites = () => {
   );
 
   const renderProductItem = useCallback(
-    ({item}: {item: Product}) => (
+    ({ item }: { item: Product }) => (
       <ProductItem
         item={item}
         goToDetails={goToDetails}
-        isFav={true}
+        isFav
         setFav={removeFav}
       />
     ),
@@ -63,7 +67,7 @@ const Favorites = () => {
   const keyExtractor = useCallback((item: Product) => item.id.toString(), []);
 
   const goHome = () => {
-    navigation.reset({index: 0, routes: [{name: 'Home'}]});
+    navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
   };
 
   return (
@@ -77,14 +81,10 @@ const Favorites = () => {
         showsVerticalScrollIndicator={false}
         onEndReachedThreshold={0.5}
         goHome={goHome}
-        contentContainerStyle={{flexGrow: 1}}
+        contentContainerStyle={{ flexGrow: 1 }}
       />
     </Container>
   );
 };
 
 export default Favorites;
-
-const Container = styled.View`
-  flex: 1;
-`;

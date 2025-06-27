@@ -1,6 +1,7 @@
-// components/ErrorBoundary.tsx
-import React, {Component, ReactNode} from 'react';
-import {Button, Text, View} from 'react-native';
+import React, { Component, ErrorInfo, ReactNode } from 'react';
+import {
+  Button, StyleSheet, Text, View,
+} from 'react-native';
 
 interface Props {
   children: ReactNode;
@@ -8,36 +9,52 @@ interface Props {
 
 interface State {
   hasError: boolean;
+  error: Error | null;
 }
 
 export default class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {hasError: false};
+    this.state = { hasError: false, error: null };
   }
 
-  static getDerivedStateFromError(_: Error): State {
-    return {hasError: true};
+  static getDerivedStateFromError(error: Error): State {
+    return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, info: any) {
-    console.log('Error caught in boundary:', error, info);
+  componentDidCatch(error: Error, info: ErrorInfo): void {
+    // Log error conditionally
+    if (__DEV__) {
+      console.error('Error caught in ErrorBoundary:', error, info);
+    }
   }
 
-  handleRetry = () => {
-    this.setState({hasError: false});
+  handleRetry = (): void => {
+    this.setState({ hasError: false });
   };
 
   render() {
-    if (this.state.hasError) {
+    const { hasError, error } = this.state;
+    const { children } = this.props;
+
+    if (hasError) {
       return (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <View style={styles.centered}>
           <Text>Oops! Something went wrong.</Text>
+          <Text>{error?.message}</Text>
           <Button title="Try Again" onPress={this.handleRetry} />
         </View>
       );
     }
 
-    return this.props.children;
+    return children;
   }
 }
+
+const styles = StyleSheet.create({
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

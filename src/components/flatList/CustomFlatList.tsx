@@ -6,11 +6,11 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import EmptyListState from '../../components/emptyState/EmptyListState';
+import EmptyListState from '../emptyState/EmptyListState';
 
 interface FlatListProps<T> extends RNFlatListProps<T> {
   data: T[];
-  renderItem: ({item}: {item: T}) => React.ReactElement;
+  renderItem: ({ item }: { item: T }) => React.ReactElement;
   keyExtractor: (item: T, index: number) => string;
   onRefresh?: () => void;
   refreshing?: boolean;
@@ -33,7 +33,7 @@ interface FlatListProps<T> extends RNFlatListProps<T> {
  *
  * @returns {JSX.Element} A FlatList component that renders the list of items.
  */
-const CustomFlatList = <T,>({
+function CustomFlatList<T>({
   data,
   renderItem,
   keyExtractor,
@@ -42,11 +42,11 @@ const CustomFlatList = <T,>({
   contentContainerStyle,
   goHome,
   ...restProps
-}: FlatListProps<T>) => {
+}: FlatListProps<T>) {
   const emptyState = () => (
     <EmptyListState
       message="No products found!"
-      isIcon={true}
+      isIcon
       icon="heart-circle-outline"
       onPress={goHome || (() => {})}
     />
@@ -65,6 +65,6 @@ const CustomFlatList = <T,>({
       {...restProps}
     />
   );
-};
+}
 
 export default CustomFlatList;

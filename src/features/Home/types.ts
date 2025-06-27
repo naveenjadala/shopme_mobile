@@ -1,3 +1,5 @@
+import { Product } from '../../types/types';
+
 export type LatestData = {
   id: number;
   title: string;
@@ -13,8 +15,7 @@ export type Item = {
   image: string;
 };
 
-export interface PromotionBanner {
-  createdAt?: any;
+export interface PromotionBanner extends Product {
   title: string;
   image: string;
   alt: string;

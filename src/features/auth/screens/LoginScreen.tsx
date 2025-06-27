@@ -1,14 +1,14 @@
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {AuthStackParamList} from 'navigation/AuthNavigator';
-import React, {useState} from 'react';
-import {Platform} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React, { useState } from 'react';
+import { ImageURISource, Platform } from 'react-native';
 import styled from 'styled-components/native';
 
+import { AuthStackParamList } from '@navigation/types';
 import Logo from '../../../asserts/images/logo.png';
 import Button from '../../../components/buttons/Button';
 import PrimaryTextInput from '../../../components/textInputs/PrimaryTextInput';
-import {useLoginMutation} from '../authApi';
+import { useLoginMutation } from '../authApi';
 import {
   AppLogo,
   Container,
@@ -20,16 +20,29 @@ import {
   Title,
 } from '../AuthSharedStyles';
 
+const inputStyle = {
+  height: 50,
+  borderWidth: 1,
+  borderRadius: 8,
+  paddingHorizontal: 15,
+  marginBottom: 15,
+  fontSize: 16,
+};
+
+const StyledButton = styled(Button)`
+  align-items: center;
+  margin-top: 15px;
+`;
+
 export default function LoginScreen() {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [login, {isLoading}] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
 
   const handleLogin = async () => {
     try {
-      await login({email, password}).unwrap();
+      await login({ email, password }).unwrap();
     } catch (err) {
       console.error('Login error:', err);
     }
@@ -38,7 +51,7 @@ export default function LoginScreen() {
   return (
     <Container behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <InnerContainer>
-        <AppLogo source={Logo} resizeMode="contain" />
+        <AppLogo source={Logo as ImageURISource} resizeMode="contain" />
 
         <Title>Login in Now</Title>
         <Subtitle>Trend It. Wear It. Love It.</Subtitle>
@@ -69,24 +82,11 @@ export default function LoginScreen() {
 
         <LinkContainer onPress={() => navigation.navigate('SignUp')}>
           <LinkText>
-            Don’t have an account? <Link>Sign up</Link>
+            Don’t have an account?
+            <Link>Sign up</Link>
           </LinkText>
         </LinkContainer>
       </InnerContainer>
     </Container>
   );
 }
-
-const inputStyle = {
-  height: 50,
-  borderWidth: 1,
-  borderRadius: 8,
-  paddingHorizontal: 15,
-  marginBottom: 15,
-  fontSize: 16,
-};
-
-const StyledButton = styled(Button)`
-  align-items: center;
-  margin-top: 15px;
-`;

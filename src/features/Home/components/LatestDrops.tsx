@@ -1,17 +1,20 @@
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {HomeStackParamList} from 'navigation/HomeStackNavigator';
-import React, {useCallback} from 'react';
-import {Dimensions, FlatList} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React, { useCallback } from 'react';
+import {
+  Dimensions, FlatList, StyleProp, ViewStyle,
+} from 'react-native';
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import styled from 'styled-components/native';
 
+import { HomeStackParamList } from '@navigation/types';
+import { Container } from '@theme/globalStyles';
 import Button from '../../../components/buttons/Button';
 import CustomFlatList from '../../../components/flatList/CustomFlatList';
-import {Product} from '../../../types/types';
+import { Product } from '../../../types/types';
 import HomeProductCard from './HomeProductCard';
 
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 const NUM_COLUMNS = 3;
 const CARD_SPACING = 15;
 
@@ -19,85 +22,9 @@ const CARD_WIDTH = (width - CARD_SPACING * (NUM_COLUMNS + 1)) / NUM_COLUMNS;
 
 interface Props {
   latestData: Product[];
-  goToProductDetails?: (id: number) => void;
   goToProducts: () => void;
   loading?: boolean;
 }
-
-/**
- * LatestDrops component renders a list of latest products.
- *
- * @param {Product[]} latestData - latest products data
- * @param {() => void} goToProducts - callback function to navigate to Products screen
- * @param {boolean} [loading=false] - whether the component is loading or not
- *
- * @returns JSX.Element
- */
-const LatestDrops: React.FC<Props> = ({latestData, goToProducts, loading}) => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
-
-  const handleProductDetails = (id: number) => {
-    navigation.navigate('ProductDetails', {id});
-  };
-
-  const renderShimmerItem = () => (
-    <ContainerCard>
-      <ShimmerImage />
-      <ContentContainer>
-        <ShimmerTitle />
-        <ShimmerPrice />
-      </ContentContainer>
-    </ContainerCard>
-  );
-
-  const renderProductCard = useCallback(
-    ({item}: {item: Product}) => (
-      <HomeProductCard item={item} getProductDetails={handleProductDetails} />
-    ),
-    [handleProductDetails],
-  );
-
-  const keyExtractor = (item: Product) => item.id.toString();
-
-  if (loading) {
-    return (
-      <Container>
-        <Title>Latest Drops</Title>
-        <FlatList
-          data={[1, 2, 3, 4, 5, 6]}
-          keyExtractor={item => item.toString()}
-          renderItem={renderShimmerItem}
-          numColumns={NUM_COLUMNS}
-          scrollEnabled={false}
-        />
-      </Container>
-    );
-  }
-
-  return (
-    <Container>
-      <Title>Latest Drops</Title>
-      <CustomFlatList
-        data={latestData}
-        renderItem={renderProductCard}
-        keyExtractor={keyExtractor}
-        numColumns={NUM_COLUMNS}
-        showsVerticalScrollIndicator={false}
-        onEndReachedThreshold={0.5}
-        scrollEnabled={false}
-        contentContainerStyle={listContainer as any}
-      />
-      <StyledViewAllButton
-        onPress={goToProducts}
-        title="View All"
-        type="secondary"
-      />
-    </Container>
-  );
-};
-
-export default LatestDrops;
 
 const listContainer = {
   alignSelf: 'center',
@@ -105,14 +32,10 @@ const listContainer = {
   paddingRight: CARD_SPACING,
 };
 
-const Container = styled.View`
-  flex: 1;
-`;
-
 const Title = styled.Text`
-  font-size: ${({theme}) => theme.fontSize.lg}px;
+  font-size: ${({ theme }) => theme.fontSize.lg}px;
   font-weight: 500;
-  color: ${({theme}) => theme.colors.black};
+  color: ${({ theme }) => theme.colors.black};
   padding: 15px;
 `;
 
@@ -165,3 +88,84 @@ const ShimmerPrice = styled(ShimmerPlaceholder).attrs(() => ({
     marginBottom: 4,
   },
 }))``;
+
+/**
+ * LatestDrops component renders a list of latest products.
+ *
+ * @param {Product[]} latestData - latest products data
+ * @param {() => void} goToProducts - callback function to navigate to Products screen
+ * @param {boolean} [loading=false] - whether the component is loading or not
+ *
+ * @returns JSX.Element
+ */
+const LatestDrops: React.FC<Props> = ({
+  latestData,
+  goToProducts,
+  loading,
+}) => {
+  const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
+
+  const handleProductDetails = useCallback(
+    (id: number) => {
+      navigation.navigate('ProductDetails', { id });
+    },
+    [navigation],
+  );
+
+  const renderShimmerItem = () => (
+    <ContainerCard>
+      <ShimmerImage />
+      <ContentContainer>
+        <ShimmerTitle />
+        <ShimmerPrice />
+      </ContentContainer>
+    </ContainerCard>
+  );
+
+  const renderProductCard = useCallback(
+    ({ item }: { item: Product }) => (
+      <HomeProductCard item={item} getProductDetails={handleProductDetails} />
+    ),
+    [handleProductDetails],
+  );
+
+  const keyExtractor = (item: Product) => item.id.toString();
+
+  if (loading) {
+    return (
+      <Container>
+        <Title>Latest Drops</Title>
+        <FlatList
+          data={[1, 2, 3, 4, 5, 6]}
+          keyExtractor={(item) => item.toString()}
+          renderItem={renderShimmerItem}
+          numColumns={NUM_COLUMNS}
+          scrollEnabled={false}
+        />
+      </Container>
+    );
+  }
+
+  return (
+    <Container>
+      <Title>Latest Drops</Title>
+      <CustomFlatList
+        data={latestData}
+        renderItem={renderProductCard}
+        keyExtractor={keyExtractor}
+        numColumns={NUM_COLUMNS}
+        showsVerticalScrollIndicator={false}
+        onEndReachedThreshold={0.5}
+        scrollEnabled={false}
+        contentContainerStyle={listContainer as StyleProp<ViewStyle>}
+      />
+      <StyledViewAllButton
+        onPress={goToProducts}
+        title="View All"
+        type="secondary"
+      />
+    </Container>
+  );
+};
+
+export default LatestDrops;

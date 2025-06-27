@@ -15,28 +15,28 @@ import {
   QueryReturnValue,
 } from '@reduxjs/toolkit/query';
 
-import {getAuth} from '@react-native-firebase/auth';
-import {db} from '../../firebase/firebaseConfig';
-import {baseApi} from '../../services';
-import {CategoryFilter, Product} from '../../types/types';
-import {ProductDetailsProps} from './types';
+import { getAuth } from '@react-native-firebase/auth';
+import { db } from '../../firebase/firebaseConfig';
+import { baseApi } from '../../services';
+import { CategoryFilter, Product } from '../../types/types';
+import { ProductDetailsProps } from './types';
 
 const productsApi = baseApi.injectEndpoints({
-  endpoints: builder => ({
+  endpoints: (builder) => ({
     getAllProducts: builder.query<
-      {products: Product[]; hasMore: boolean; pageNo: number},
-      {pageNo: number; pageSize: number; categoryFilter?: CategoryFilter}
+    { products: Product[]; hasMore: boolean; pageNo: number },
+    { pageNo: number; pageSize: number; categoryFilter?: CategoryFilter }
     >({
       queryFn: async ({
         pageNo = 1,
         pageSize = 6,
         categoryFilter,
       }): Promise<
-        QueryReturnValue<
-          {products: Product[]; hasMore: boolean; pageNo: number},
-          FetchBaseQueryError,
-          FetchBaseQueryMeta
-        >
+      QueryReturnValue<
+      { products: Product[]; hasMore: boolean; pageNo: number },
+      FetchBaseQueryError,
+      FetchBaseQueryMeta
+      >
       > => {
         try {
           let baseQuery = query(collection(db, 'products'));
@@ -83,8 +83,7 @@ const productsApi = baseApi.injectEndpoints({
             );
 
             const skippedSnapshot = await getDocs(skipQuery);
-            const lastDoc =
-              skippedSnapshot.docs[skippedSnapshot.docs.length - 1];
+            const lastDoc = skippedSnapshot.docs[skippedSnapshot.docs.length - 1];
 
             if (lastDoc) {
               baseQuery = query(baseQuery, startAfter(lastDoc));
@@ -94,48 +93,51 @@ const productsApi = baseApi.injectEndpoints({
           const finalQuery = query(baseQuery, limit(pageSize));
           const snapshot = await getDocs(finalQuery);
 
-          const products = snapshot.docs.map(doc => {
-            const data = doc.data();
+          const products = snapshot.docs.map((value) => {
+            const data = value.data() as Product;
             return {
-              id: doc.id,
               ...data,
-              createdAt: data.createdAt?.toDate().toISOString(),
+              createdAt: data.createdAt
+                ? new Date(data.createdAt).toISOString()
+                : '',
             };
           });
 
-          console.log('products', products);
-
           return {
             data: {
-              products: products,
+              products,
               hasMore: snapshot.docs.length === pageSize,
               pageNo,
             },
           };
-        } catch (error: any) {
+        } catch (error: unknown) {
+          const errorWithCode = error as { code: string; message: string };
           return {
             error: {
-              status: 500,
-              data: error.message,
+              status: Number(errorWithCode?.code) || 500,
+              data: {
+                message: errorWithCode?.message,
+                code: errorWithCode?.code || 'INTERNAL_ERROR',
+              },
             },
           };
         }
       },
       providesTags: ['Product', 'Favorites'],
     }),
-    getProductById: builder.query<ProductDetailsProps, {productId: number}>({
+    getProductById: builder.query<ProductDetailsProps, { productId: number }>({
       queryFn: async ({
         productId,
       }): Promise<
-        QueryReturnValue<
-          ProductDetailsProps,
-          FetchBaseQueryError,
-          FetchBaseQueryMeta
-        >
+      QueryReturnValue<
+      ProductDetailsProps,
+      FetchBaseQueryError,
+      FetchBaseQueryMeta
+      >
       > => {
         try {
           // 1. Validate numeric ID
-          if (isNaN(productId) || productId <= 0) {
+          if (Number.isNaN(productId) || productId <= 0) {
             throw new Error('Invalid product ID');
           }
 
@@ -156,25 +158,30 @@ const productsApi = baseApi.injectEndpoints({
             };
           }
 
-          const doc = querySnapshot.docs[0];
-          const productData = doc.data();
+          // const docData = querySnapshot.docs[0];
+          // const productData = docData.data();
+          const docData = querySnapshot.docs[0];
+          const productData = docData.data() as ProductDetailsProps & {
+            createdAt?: { toDate: () => Date };
+          };
 
           return {
             data: {
               ...(productData as ProductDetailsProps),
-              id: productData.id as number,
+              id: productData.id,
               createdAt:
-                productData.createdAt?.toDate?.()?.toISOString() ||
-                new Date().toISOString(),
+                productData.createdAt?.toDate().toISOString()
+                ?? new Date().toISOString(),
             },
           };
-        } catch (error: any) {
+        } catch (error: unknown) {
+          const errorWithCode = error as { code: string; message: string };
           return {
             error: {
-              status: error.code || 500,
+              status: Number(errorWithCode?.code) || 500,
               data: {
-                message: error.message,
-                code: error.code || 'INTERNAL_ERROR',
+                message: errorWithCode?.message,
+                code: errorWithCode?.code || 'INTERNAL_ERROR',
                 productId,
               },
             },
@@ -187,7 +194,7 @@ const productsApi = baseApi.injectEndpoints({
       queryFn: async (
         item: ProductDetailsProps,
       ): Promise<
-        QueryReturnValue<string, FetchBaseQueryError, FetchBaseQueryMeta>
+      QueryReturnValue<string, FetchBaseQueryError, FetchBaseQueryMeta>
       > => {
         try {
           const userId = getAuth().currentUser?.uid;
@@ -206,18 +213,18 @@ const productsApi = baseApi.injectEndpoints({
             'favorites',
             item.id.toString(),
           );
-          const docRef = await setDoc(favoritesRef, {
+          await setDoc(favoritesRef, {
             ...item,
             addedAt: new Date(),
           });
-          console.log('Added to favorites!', docRef);
 
-          return {data: ''};
-        } catch (error: any) {
+          return { data: 'Favorite added successfully' };
+        } catch (error: unknown) {
+          const errorWithCode = error as { code: number; message: string };
           return {
             error: {
-              status: error.code || 500,
-              data: error.message,
+              status: errorWithCode?.code || 500,
+              data: errorWithCode?.message,
             },
           };
         }

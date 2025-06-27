@@ -1,70 +1,73 @@
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {HomeStackParamList} from 'navigation/HomeStackNavigator';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
-import {ScrollView} from 'react-native';
+import { ImageURISource, ScrollView } from 'react-native';
 
+import { HomeStackParamList } from '@navigation/types';
 import img1 from '../../../asserts/images/img1.png';
 import img2 from '../../../asserts/images/img2.png';
 import img3 from '../../../asserts/images/img3.png';
-import {LatestDrops, NewFeatured} from '../components';
+import { LatestDrops, NewFeatured } from '../components';
 import CategoryBanner from '../components/CategoryBanner';
-import {useGetLatestProductsQuery, useGetNewFeaturedQuery} from '../homeApi';
+import { useGetLatestProductsQuery, useGetNewFeaturedQuery } from '../homeApi';
 
-const categories = [
+const categories: { label: string; key: string; image: ImageURISource }[] = [
   {
     label: 'Shoes',
     key: 'shoes',
-    image: img1,
+    image: img1 as ImageURISource,
   },
   {
     label: 'Clothing',
     key: 'clothing',
-    image: img2,
+    image: img2 as ImageURISource,
   },
   {
     label: 'Accessories',
     key: 'accessories',
-    image: img3,
+    image: img3 as ImageURISource,
   },
 ];
 
 /**
- * HomeKids is a component that displays a list of featured products, categories and latest products specifically for women.
+ * HomeKids is a component that displays a list of featured products, categories
+ * and latest products specifically for women.
  *
  * @returns {React.ReactElement} A JSX element representing the HomeWomen component.
  */
 const HomeKids = () => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
 
   const categoryFilter = {
     gender: 'kids',
     isLatest: true,
   };
 
-  const {data: newFeatured, isLoading} = useGetNewFeaturedQuery({type: 'kids'});
-  const {data: latestDropsData, isLoading: dropsLoading} =
-    useGetLatestProductsQuery({categoryFilter});
+  const { data: newFeatured, isLoading } = useGetNewFeaturedQuery({
+    type: 'kids',
+  });
+  const { data: latestDropsData, isLoading: dropsLoading } = useGetLatestProductsQuery({
+    categoryFilter,
+  });
 
   const reDirectToProduct = (params: object) => {
     navigation.navigate('Products', params);
   };
 
   return (
-    <ScrollView style={{flex: 1}}>
+    <ScrollView style={{ flex: 1 }}>
       <NewFeatured
         newFeatured={newFeatured || []}
-        onClick={() => reDirectToProduct({gender: 'kids', isFeatured: true})}
+        onClick={() => reDirectToProduct({ gender: 'kids', isFeatured: true })}
         loading={isLoading}
       />
       <CategoryBanner
         categories={categories}
-        onPress={category => reDirectToProduct({category, gender: 'kids'})}
+        onPress={category => reDirectToProduct({ category, gender: 'kids' })}
       />
       <LatestDrops
         latestData={latestDropsData?.products || []}
-        goToProducts={() => reDirectToProduct({gender: 'kids'})}
+        goToProducts={() => reDirectToProduct({ gender: 'kids' })}
         loading={dropsLoading}
       />
     </ScrollView>

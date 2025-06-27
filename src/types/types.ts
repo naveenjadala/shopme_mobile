@@ -1,7 +1,7 @@
-import {NavigationState} from 'react-native-tab-view';
+import { NavigationState } from 'react-native-tab-view';
 
 export type TabBarProps = {
-  navigationState: NavigationState<{key: string; title: string}>;
+  navigationState: NavigationState<{ key: string; title: string }>;
   jumpTo: (key: string) => void;
 };
 
@@ -28,6 +28,7 @@ export interface Product {
   image: string;
   iconImg: string;
   addedAt?: string;
+  createdAt?: string;
 }
 
 export type CategoryFilter = {

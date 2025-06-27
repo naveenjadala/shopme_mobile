@@ -1,25 +1,20 @@
-import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {useAuth} from '../context/AuthProvider';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
+import { useAuth } from '../context/AuthProvider';
 import Checkout from '../features/Checkout/Checkout';
 import OrderSuccess from '../features/OrderSuccess/OrderSuccess';
 import ProductsList from '../features/Products/screens/ProductsList';
-import {useTheme} from '../theme/ThemeContext';
+import { useTheme } from '../theme/ThemeContext';
 import AuthNavigator from './AuthNavigator';
 import BottomTabs from './BottomTabs';
+import { AppStackParamList } from './types';
 
-export type RootStackParamList = {
-  Tabs: undefined;
-  Product: undefined;
-  Checkout: undefined;
-  OrderSuccess: undefined;
-};
-
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Stack = createNativeStackNavigator<AppStackParamList>();
 
 const AppNavigator = () => {
-  const {theme} = useTheme();
-  const {user, loading} = useAuth();
+  const { theme } = useTheme();
+  const { user, loading } = useAuth();
 
   const navigationTheme = {
     ...DefaultTheme,
@@ -38,7 +33,7 @@ const AppNavigator = () => {
   return (
     <NavigationContainer theme={navigationTheme}>
       {user ? (
-        <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Tabs" component={BottomTabs} />
           <Stack.Screen name="Product" component={ProductsList} />
           <Stack.Screen name="Checkout" component={Checkout} />

@@ -1,6 +1,12 @@
 import React from 'react';
-import {ActivityIndicator, ActivityIndicatorProps} from 'react-native';
+import { ActivityIndicator, ActivityIndicatorProps } from 'react-native';
 import styled from 'styled-components/native';
+
+const Container = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
 
 type LoaderProps = {
   size?: ActivityIndicatorProps['size'];
@@ -8,31 +14,18 @@ type LoaderProps = {
 };
 
 /**
- * Loader is a reusable component that displays a loading indicator.
+ * A full-screen loader component.
  *
- * @component
- * @example
- * <Loader size="small" color="#fff" />
+ * @param {LoaderProps} props The props of the component.
+ * @param {ActivityIndicatorProps['size']} [props.size='large'] The size of the loader.
+ * @param {ActivityIndicatorProps['color']} [props.color='#000'] The color of the loader.
  *
- * @param {LoaderProps} props - Properties to configure the loader.
- * @param {('small' | 'large')} [props.size='large'] - The size of the loader.
- * @param {string} [props.color='#000'] - The color of the loader.
- *
- * @returns {JSX.Element} A styled container with an ActivityIndicator component.
+ * @returns {React.ReactElement} The loader component.
  */
-
-const Loader: React.FC<LoaderProps> = ({size = 'large', color = '#000'}) => {
-  return (
-    <Container>
-      <ActivityIndicator size={size} color={color} />
-    </Container>
-  );
-};
+const Loader: React.FC<LoaderProps> = ({ size = 'large', color = '#000' }) => (
+  <Container>
+    <ActivityIndicator size={size} color={color} />
+  </Container>
+);
 
 export default Loader;
-
-const Container = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;

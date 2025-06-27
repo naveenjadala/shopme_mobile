@@ -1,21 +1,29 @@
-import React, {useCallback} from 'react';
-import {useWindowDimensions} from 'react-native';
-import {SceneMap, TabView} from 'react-native-tab-view';
+import React, { useCallback } from 'react';
+import { useWindowDimensions } from 'react-native';
+import { SceneMap, TabView } from 'react-native-tab-view';
 import styled from 'styled-components/native';
 
-import {TabBarProps} from '../../../types/types';
-import {TabBar} from '../components';
+import { Container } from '@theme/globalStyles';
+import { TabBarProps } from '../../../types/types';
+import { TabBar } from '../components';
 import HomeKids from './HomeKids';
 import HomeMen from './HomeMen';
 import HomeWomen from './HomeWomen';
 
-type Route = {key: 'men' | 'women' | 'kids'; title: string};
+type Route = { key: 'men' | 'women' | 'kids'; title: string };
 
 const routes: Route[] = [
-  {key: 'men', title: 'Men'},
-  {key: 'women', title: 'Women'},
-  {key: 'kids', title: 'Kids'},
+  { key: 'men', title: 'Men' },
+  { key: 'women', title: 'Women' },
+  { key: 'kids', title: 'Kids' },
 ];
+
+const Title = styled.Text`
+  font-size: 24px;
+  font-weight: 500;
+  padding: 0px 0px 15px 15px;
+  color: ${({ theme }) => theme.colors.black};
+`;
 
 const renderScene = SceneMap({
   men: HomeMen,
@@ -35,8 +43,8 @@ const HomeTabView = () => {
   const [index, setIndex] = React.useState<number>(0);
 
   const renderTabBar = useCallback(
-    ({navigationState, jumpTo}: TabBarProps) => (
-      <TabBar {...{navigationState, jumpTo}} />
+    ({ navigationState, jumpTo }: TabBarProps) => (
+      <TabBar {...{ navigationState, jumpTo }} />
     ),
     [],
   );
@@ -46,9 +54,9 @@ const HomeTabView = () => {
       <Title>Shop</Title>
       <TabView
         renderScene={renderScene}
-        navigationState={{index, routes}}
+        navigationState={{ index, routes }}
         renderTabBar={renderTabBar}
-        initialLayout={{width: layout.width / 4}}
+        initialLayout={{ width: layout.width / 4 }}
         swipeEnabled={false}
         lazy
         onIndexChange={setIndex}
@@ -58,14 +66,3 @@ const HomeTabView = () => {
 };
 
 export default HomeTabView;
-
-const Container = styled.View`
-  flex: 1;
-`;
-
-const Title = styled.Text`
-  font-size: 24px;
-  font-weight: 500;
-  padding: 0px 0px 15px 15px;
-  color: ${({theme}) => theme.colors.black};
-`;

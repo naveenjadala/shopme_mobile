@@ -1,9 +1,9 @@
-import {getAuth} from '@react-native-firebase/auth';
-import {collection, getDocs, query} from '@react-native-firebase/firestore';
-import {useCallback, useEffect, useState} from 'react';
-import {db} from '../firebase/firebaseConfig';
+import { getAuth } from '@react-native-firebase/auth';
+import { collection, getDocs, query } from '@react-native-firebase/firestore';
+import { useCallback, useEffect, useState } from 'react';
+import { db } from '../firebase/firebaseConfig';
 
-export const useFavorites = () => {
+const useFavorites = () => {
   const [favorites, setFavorites] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -19,7 +19,7 @@ export const useFavorites = () => {
     try {
       const q = query(collection(db, 'users', userId, 'favorites'));
       const querySnapshot = await getDocs(q);
-      const favIds = querySnapshot.docs.map(doc => doc.id);
+      const favIds = querySnapshot.docs.map((doc) => doc.id);
       setFavorites(favIds);
     } catch (error) {
       console.error('Error fetching favorites:', error);
@@ -32,5 +32,7 @@ export const useFavorites = () => {
     fetchFavorites();
   }, [fetchFavorites]);
 
-  return {favorites, loading, refetch: fetchFavorites};
+  return { favorites, loading, refetch: fetchFavorites };
 };
+
+export default useFavorites;

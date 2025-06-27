@@ -1,4 +1,4 @@
-import {Product} from '../../types/types';
+import { Product } from '../../types/types';
 
 export interface ProductDetailsProps extends Product {
   description: string;

@@ -11,17 +11,13 @@ import {
   query,
   where,
 } from '@react-native-firebase/firestore';
-import {db} from '../../firebase/firebaseConfig';
-import {baseApi} from '../../services';
-import {CategoryFilter, Product} from '../../types/types';
-import {CategoryData, LatestData, PromotionBanner} from './types';
-
-interface FeaturedFilters {
-  type: string;
-}
+import { db } from '../../firebase/firebaseConfig';
+import { baseApi } from '../../services';
+import { CategoryFilter, Product } from '../../types/types';
+import { CategoryData, LatestData, PromotionBanner } from './types';
 
 export const homeApi = baseApi.injectEndpoints({
-  endpoints: builder => ({
+  endpoints: (builder) => ({
     getMenTab: builder.query<CategoryData, void>({
       query: () => 'mensTab',
     }),
@@ -32,7 +28,7 @@ export const homeApi = baseApi.injectEndpoints({
       query: () => 'kidsTab',
     }),
     getLatestDrops: builder.query<LatestData[], Record<string, unknown>>({
-      query: params => {
+      query: (params) => {
         const queryString = new URLSearchParams();
         Object.entries(params || {}).forEach(([key, value]) => {
           if (value !== undefined && value !== null) {
@@ -42,15 +38,15 @@ export const homeApi = baseApi.injectEndpoints({
         return `latestDrops?${queryString.toString()}`;
       },
     }),
-    getNewFeatured: builder.query<PromotionBanner[], {type?: string}>({
+    getNewFeatured: builder.query<PromotionBanner[], { type?: string }>({
       queryFn: async ({
         type,
       }): Promise<
-        QueryReturnValue<
-          PromotionBanner[],
-          FetchBaseQueryError,
-          FetchBaseQueryMeta
-        >
+      QueryReturnValue<
+      PromotionBanner[],
+      FetchBaseQueryError,
+      FetchBaseQueryMeta
+      >
       > => {
         try {
           let baseQuery = query(
@@ -67,42 +63,44 @@ export const homeApi = baseApi.injectEndpoints({
           const querySnapshot = await getDocs(baseQuery);
 
           if (querySnapshot.empty) {
-            console.warn('No documents matching filter "type==men"');
-            return {data: []};
+            return { data: [] };
           }
 
           // Process documents
-          const featured: PromotionBanner[] = querySnapshot.docs.map(doc => {
-            const data = doc.data() as PromotionBanner;
+          const featured: PromotionBanner[] = querySnapshot.docs.map((doc) => {
+            // const data = doc.data() as PromotionBanner;
+            const productData = doc.data() as PromotionBanner & {
+              createdAt?: { toDate: () => Date };
+            };
             return {
-              id: doc.id,
-              ...data,
-              createdAt: data.createdAt?.toDate().toISOString(),
+              ...productData,
+              createdAt: productData.createdAt?.toDate().toISOString(),
             };
           });
-          return featured.length > 0 ? {data: featured} : {data: []};
-        } catch (error: any) {
+          return featured.length > 0 ? { data: featured } : { data: [] };
+        } catch (error: unknown) {
+          const errorWithCode = error as { code: number; message: string };
           return {
             error: {
-              status: 500,
-              data: error.message,
+              status: errorWithCode?.code || 500,
+              data: errorWithCode?.message,
             },
           };
         }
       },
     }),
     getLatestProducts: builder.query<
-      {products: Product[]},
-      {categoryFilter?: CategoryFilter}
+    { products: Product[] },
+    { categoryFilter?: CategoryFilter }
     >({
       queryFn: async ({
         categoryFilter,
       }): Promise<
-        QueryReturnValue<
-          {products: Product[]},
-          FetchBaseQueryError,
-          FetchBaseQueryMeta
-        >
+      QueryReturnValue<
+      { products: Product[] },
+      FetchBaseQueryError,
+      FetchBaseQueryMeta
+      >
       > => {
         try {
           let baseQuery = query(collection(db, 'products'));
@@ -119,29 +117,30 @@ export const homeApi = baseApi.injectEndpoints({
 
           baseQuery = query(baseQuery, orderBy('createdAt', 'desc'));
 
-          console.log(baseQuery, 'baseQuery');
-
           const snapshot = await getDocs(baseQuery);
 
-          const products = snapshot.docs.map(doc => {
-            const data = doc.data();
+          const products = snapshot.docs.map((doc) => {
+            // const data = doc.data();
+            const productData = doc.data() as PromotionBanner & {
+              createdAt?: { toDate: () => Date };
+            };
             return {
-              id: doc.id,
-              ...data,
-              createdAt: data.createdAt?.toDate().toISOString(),
+              ...productData,
+              createdAt: productData.createdAt?.toDate().toISOString(),
             };
           });
 
           return {
             data: {
-              products: products,
+              products,
             },
           };
-        } catch (error: any) {
+        } catch (error: unknown) {
+          const errorWithCode = error as { code: number; message: string };
           return {
             error: {
-              status: 500,
-              data: error.message,
+              status: errorWithCode?.code || 500,
+              data: errorWithCode?.message,
             },
           };
         }

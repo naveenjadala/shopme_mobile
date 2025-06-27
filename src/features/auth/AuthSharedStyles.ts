@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 
 export const Container = styled.KeyboardAvoidingView`
   flex: 1;
-  background-color: ${({theme}) => theme.colors.background};
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 export const InnerContainer = styled.View`
@@ -19,16 +19,16 @@ export const AppLogo = styled.Image`
 `;
 
 export const Title = styled.Text`
-  font-size: ${({theme}) => theme.fontSize.md}px;
+  font-size: ${({ theme }) => theme.fontSize.md}px;
   font-weight: bold;
   text-align: center;
   margin-bottom: 8px;
-  color: ${({theme}) => theme.colors.textPrimary};
+  color: ${({ theme }) => theme.colors.textPrimary};
 `;
 
 export const Subtitle = styled.Text`
-  font-size: ${({theme}) => theme.fontSize.base}px;
-  color: ${({theme}) => theme.colors.textPrimary};
+  font-size: ${({ theme }) => theme.fontSize.base}px;
+  color: ${({ theme }) => theme.colors.textPrimary};
   text-align: center;
   margin-bottom: 30px;
 `;
@@ -42,7 +42,7 @@ export const LinkContainer = styled.TouchableOpacity`
 `;
 
 export const LinkText = styled.Text`
-  color: ${({theme}) => theme.colors.textPrimary};
+  color: ${({ theme }) => theme.colors.textPrimary};
 `;
 
 export const Link = styled.Text`

@@ -1,20 +1,22 @@
-import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
+import {
+  CompositeNavigationProp,
+  useNavigation,
+} from '@react-navigation/native';
 import React from 'react';
-import styled from 'styled-components/native';
 
-import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {BottomTabParamList} from 'navigation/BottomTabs';
-import {HomeStackParamList} from 'navigation/HomeStackNavigator';
+import { BottomTabParamList, CartStackParamList } from '@navigation/types';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Container } from '@theme/globalStyles';
 import Button from '../../components/buttons/Button';
 import EmptyListState from '../../components/emptyState/EmptyListState';
 import Header from '../../components/Headers/Header';
-import {useGetCartItemsQuery} from './cartApi';
+import { useGetCartItemsQuery } from './cartApi';
 import CartList from './components/CartList';
 
 type NavigationProp = CompositeNavigationProp<
-  BottomTabNavigationProp<BottomTabParamList, 'Home'>,
-  NativeStackNavigationProp<HomeStackParamList>
+NativeStackNavigationProp<CartStackParamList, 'CartScreen'>,
+BottomTabNavigationProp<BottomTabParamList>
 >;
 
 /**
@@ -29,19 +31,19 @@ type NavigationProp = CompositeNavigationProp<
 const Cart = () => {
   const navigation = useNavigation<NavigationProp>();
 
-  const {data: cartData} = useGetCartItemsQuery();
+  const { data: cartData } = useGetCartItemsQuery();
 
   const productDetails = (itemId: number) => {
-    navigation.navigate({name: 'ProductDetails', params: {id: itemId}});
+    navigation.navigate({ name: 'ProductDetails', params: { id: itemId } });
   };
 
   if (!cartData) {
     return (
       <EmptyListState
         message="You have no products yet in your cart"
-        isIcon={true}
+        isIcon
         icon="cart-outline"
-        onPress={() => navigation.navigate({name: 'Home', params: {}})}
+        onPress={() => navigation.navigate({ name: 'Home', params: {} })}
       />
     );
   }
@@ -53,8 +55,8 @@ const Cart = () => {
       <Button
         title="Checkout"
         type="primary"
-        onPress={() => navigation.navigate({name: 'Checkout'})}
-        style={{margin: 15}}
+        onPress={() => navigation.navigate({ name: 'Checkout' })}
+        style={{ margin: 15 }}
       />
     </Container>
   );
@@ -62,8 +64,8 @@ const Cart = () => {
 
 export default Cart;
 
-const Container = styled.View`
-  flex: 1;
-  background-color: ${({theme}) => theme.colors.background};
-  margin-bottom: 8px;
-`;
+// const Container = styled.View`
+//   flex: 1;
+//   background-color: ${({ theme }) => theme.colors.background};
+//   margin-bottom: 8px;
+// `;

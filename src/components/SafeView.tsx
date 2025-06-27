@@ -1,8 +1,13 @@
 import React from 'react';
-import {Platform, StatusBar} from 'react-native';
-import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
+import { Platform, StatusBar } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
-import {useTheme} from '../theme/ThemeContext';
+import { useTheme } from '../theme/ThemeContext';
+
+const SafeAreaViewStyled = styled(SafeAreaView)`
+  flex: 1;
+  background-color: ${({ theme }) => theme.colors.background};
+`;
 
 /**
  * A convenience component that wraps a given component with
@@ -10,8 +15,8 @@ import {useTheme} from '../theme/ThemeContext';
  * Additionally, it sets the status bar's background color to the
  * current theme's background color and sets the bar style to "light-content".
  */
-const SafeView = ({children}: {children: React.ReactNode}) => {
-  const {theme} = useTheme();
+const SafeView = ({ children }: { children: React.ReactNode }) => {
+  const { theme } = useTheme();
   return (
     <SafeAreaProvider>
       <SafeAreaViewStyled edges={['top']}>
@@ -28,8 +33,3 @@ const SafeView = ({children}: {children: React.ReactNode}) => {
 };
 
 export default SafeView;
-
-const SafeAreaViewStyled = styled(SafeAreaView)`
-  flex: 1;
-  background-color: ${({theme}) => theme.colors.background};
-`;

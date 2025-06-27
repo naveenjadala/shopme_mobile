@@ -1,19 +1,19 @@
 import React from 'react';
-import {ViewProps} from 'react-native';
+import { ViewProps } from 'react-native';
 import styled from 'styled-components/native';
+
+const Spacer = styled.View<SpacingProps>`
+  height: ${({ height }) => height}px;
+  width: ${({ width }) => width}px;
+`;
 
 interface SpacingProps extends ViewProps {
   height?: number;
   width?: number;
 }
 
-const Spacing = ({height = 0, width = 0, ...rest}: SpacingProps) => {
-  return <Spacer height={height} width={width} {...rest} />;
-};
+const Spacing = ({ height = 0, width = 0, ...rest }: SpacingProps) => (
+  <Spacer height={height} width={width} {...rest} />
+);
 
 export default Spacing;
-
-const Spacer = styled.View<SpacingProps>`
-  height: ${({height}) => height}px;
-  width: ${({width}) => width}px;
-`;
