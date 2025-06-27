@@ -70,9 +70,7 @@ const FavIcon = styled.TouchableOpacity`
 `;
 
 const ProductItem = React.memo(
-  ({
-    item, goToDetails, getFavorites, setFav,
-  }: ItemProps) => {
+  ({ item, goToDetails, getFavorites, setFav }: ItemProps) => {
     const handleDetails = () => {
       goToDetails(item.id);
     };

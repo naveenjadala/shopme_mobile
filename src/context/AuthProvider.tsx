@@ -4,9 +4,7 @@ import {
   getAuth,
   onAuthStateChanged,
 } from '@react-native-firebase/auth';
-import React, {
-  createContext, useEffect, useMemo, useState,
-} from 'react';
+import React, { createContext, useEffect, useMemo, useState } from 'react';
 
 interface AuthContextType {
   user: FirebaseAuthTypes.User | null;
@@ -24,7 +22,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const auth = getAuth(getApp());
-    const subscriber = onAuthStateChanged(auth, (currentUser) => {
+    const subscriber = onAuthStateChanged(auth, currentUser => {
       setUser(currentUser);
       setLoading(false);
     });

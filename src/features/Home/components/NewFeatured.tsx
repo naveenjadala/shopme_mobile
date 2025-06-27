@@ -107,7 +107,7 @@ const NewFeatured: React.FC<Props> = ({ newFeatured, onClick, loading }) => {
       <Heading>New & Featured</Heading>
       <FlatList
         data={newFeatured}
-        keyExtractor={(item) => item.title}
+        keyExtractor={item => item.title}
         horizontal
         contentContainerStyle={{ paddingLeft: 15 }}
         showsHorizontalScrollIndicator={false}

@@ -184,7 +184,7 @@ const CartList = ({ productDetails, cateData }: CartListProps) => {
         data={cateData}
         renderItem={renderItem}
         ListFooterComponent={ListFooter}
-        keyExtractor={(item) => `${item.id}-${item.productId}`}
+        keyExtractor={item => `${item.id}-${item.productId}`}
         initialNumToRender={5}
         maxToRenderPerBatch={5}
         windowSize={5}

@@ -1,9 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback } from 'react';
-import {
-  Dimensions, FlatList, StyleProp, ViewStyle,
-} from 'react-native';
+import { Dimensions, FlatList, StyleProp, ViewStyle } from 'react-native';
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import styled from 'styled-components/native';
 
@@ -137,7 +135,7 @@ const LatestDrops: React.FC<Props> = ({
         <Title>Latest Drops</Title>
         <FlatList
           data={[1, 2, 3, 4, 5, 6]}
-          keyExtractor={(item) => item.toString()}
+          keyExtractor={item => item.toString()}
           renderItem={renderShimmerItem}
           numColumns={NUM_COLUMNS}
           scrollEnabled={false}

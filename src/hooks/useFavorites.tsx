@@ -19,7 +19,7 @@ const useFavorites = () => {
     try {
       const q = query(collection(db, 'users', userId, 'favorites'));
       const querySnapshot = await getDocs(q);
-      const favIds = querySnapshot.docs.map((doc) => doc.id);
+      const favIds = querySnapshot.docs.map(doc => doc.id);
       setFavorites(favIds);
     } catch (error) {
       console.error('Error fetching favorites:', error);

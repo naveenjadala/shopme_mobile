@@ -41,7 +41,7 @@ const BottomTabs = () => {
         name="Home"
         component={HomeStackNavigator}
         listeners={({ navigation }) => ({
-          tabPress: (e) => {
+          tabPress: e => {
             e.preventDefault();
             navigation.dispatch(
               CommonActions.reset({
@@ -56,7 +56,7 @@ const BottomTabs = () => {
         name="Favorites"
         component={FavStackNavigator}
         listeners={({ navigation }) => ({
-          tabPress: (e) => {
+          tabPress: e => {
             e.preventDefault();
             navigation.dispatch(
               CommonActions.reset({
@@ -71,7 +71,7 @@ const BottomTabs = () => {
         name="Cart"
         component={CartStackNavigator}
         listeners={({ navigation }) => ({
-          tabPress: (e) => {
+          tabPress: e => {
             e.preventDefault();
             navigation.dispatch(
               CommonActions.reset({
@@ -86,7 +86,7 @@ const BottomTabs = () => {
         name="Profile"
         component={Profile}
         listeners={({ navigation }) => ({
-          tabPress: (e) => {
+          tabPress: e => {
             e.preventDefault();
             navigation.dispatch(
               CommonActions.reset({

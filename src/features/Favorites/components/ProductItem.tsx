@@ -49,9 +49,7 @@ const FavIcon = styled.TouchableOpacity`
 `;
 
 export const ProductItem = memo(
-  ({
-    item, goToDetails, isFav, setFav,
-  }: ItemProps) => {
+  ({ item, goToDetails, isFav, setFav }: ItemProps) => {
     const toggleFav = () => setFav(item.id);
     const details = () => goToDetails(item.id);
 

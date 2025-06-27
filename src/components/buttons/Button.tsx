@@ -75,15 +75,15 @@ const Button = ({
     activeOpacity={0.8}
   >
     {icon && iconPosition === 'left' && (
-    <IconWrapper testID="left-icon">{icon}</IconWrapper>
+      <IconWrapper testID="left-icon">{icon}</IconWrapper>
     )}
     {title && (
-    <ButtonText type={type} style={textStyle}>
-      {title}
-    </ButtonText>
+      <ButtonText type={type} style={textStyle}>
+        {title}
+      </ButtonText>
     )}
     {icon && iconPosition === 'right' && (
-    <IconWrapper testID="right-icon">{icon}</IconWrapper>
+      <IconWrapper testID="right-icon">{icon}</IconWrapper>
     )}
   </ButtonContainer>
 );

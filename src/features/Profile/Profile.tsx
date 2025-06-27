@@ -117,7 +117,7 @@ const Profile = () => {
           <Email>{user?.email || ''}</Email>
         </ProfileCard>
         <OptionsCard>
-          {options.map((item) => (
+          {options.map(item => (
             <OptionItem
               key={item?.label}
               label={item.label}

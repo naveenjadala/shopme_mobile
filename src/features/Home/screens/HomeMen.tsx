@@ -68,7 +68,7 @@ const HomeMen = () => {
       />
       <CategoryBanner
         categories={categories}
-        onPress={(category) => reDirectToProduct({ gender: 'men', category })}
+        onPress={category => reDirectToProduct({ gender: 'men', category })}
       />
       <LatestDrops
         latestData={latestDropsData?.products.slice(0, 9) || []}
