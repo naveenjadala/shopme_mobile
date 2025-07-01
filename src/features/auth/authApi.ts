@@ -4,18 +4,36 @@ import {
   getAuth,
 } from '@react-native-firebase/auth';
 import { doc, setDoc } from '@react-native-firebase/firestore';
+import {
+  FetchBaseQueryError,
+  FetchBaseQueryMeta,
+  QueryReturnValue,
+} from '@reduxjs/toolkit/query';
 import { db } from '../../firebase/firebaseConfig';
 import { baseApi } from '../../services';
 
+type User = {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+};
+
 const authApi = baseApi.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     login: builder.mutation<
-    {
-      user: { uid: string; email: string | null; displayName: string | null };
-    },
+    { user: User },
     { email: string; password: string }
     >({
-      async queryFn({ email, password }) {
+      queryFn: async ({
+        email,
+        password,
+      }): Promise<
+      QueryReturnValue<
+      { user: User },
+      FetchBaseQueryError,
+      FetchBaseQueryMeta
+      >
+      > => {
         try {
           const userDetails = await getAuth().signInWithEmailAndPassword(
             email,
@@ -28,12 +46,15 @@ const authApi = baseApi.injectEndpoints({
             displayName: user.displayName,
           };
           return { data: { user: safeUser } };
-        } catch (error) {
+        } catch (error: unknown) {
+          const errorWithCode = error as { code: string; message: string };
           return {
             error: {
-              status: 500,
-              statusText: error,
-              data: 'Unknown error',
+              status: Number(errorWithCode?.code) || 500,
+              data: {
+                message: errorWithCode?.message,
+                code: errorWithCode?.code || 'INTERNAL_ERROR',
+              },
             },
           };
         }

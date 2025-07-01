@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
 
@@ -37,30 +37,25 @@ interface EmptyListProps {
   style?: ViewStyle;
 }
 
-const EmptyListState = ({
-  title,
-  message,
-  isIcon,
-  icon,
-  onPress,
-  style,
-}: EmptyListProps) => (
-  <Container style={style}>
-    {isIcon && <Icon name={icon} size={60} />}
-    {title && <Title>{title}</Title>}
-    <Message>{message}</Message>
-    <ButtonContainer
-      title="Go back"
-      onPress={onPress}
-      type="primary"
-      style={{
-        position: 'absolute',
-        bottom: 0,
-        width: '90%',
-        height: 50,
-      }}
-    />
-  </Container>
+const EmptyListState = memo(
+  ({ title, message, isIcon, icon, onPress, style }: EmptyListProps) => (
+    <Container style={style}>
+      {isIcon && <Icon name={icon} size={60} />}
+      {title && <Title>{title}</Title>}
+      <Message>{message}</Message>
+      <ButtonContainer
+        title="Go back"
+        onPress={onPress}
+        type="primary"
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          width: '90%',
+          height: 50,
+        }}
+      />
+    </Container>
+  ),
 );
 
 export default EmptyListState;

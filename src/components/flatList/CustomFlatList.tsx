@@ -6,8 +6,6 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import EmptyListState from '../emptyState/EmptyListState';
-
 interface FlatListProps<T> extends RNFlatListProps<T> {
   data: T[];
   renderItem: ({ item }: { item: T }) => React.ReactElement;
@@ -15,7 +13,6 @@ interface FlatListProps<T> extends RNFlatListProps<T> {
   onRefresh?: () => void;
   refreshing?: boolean;
   contentContainerStyle?: StyleProp<ViewStyle>;
-  goHome?: () => void;
 }
 
 /**
@@ -40,18 +37,8 @@ function CustomFlatList<T>({
   onRefresh,
   refreshing,
   contentContainerStyle,
-  goHome,
   ...restProps
 }: FlatListProps<T>) {
-  const emptyState = () => (
-    <EmptyListState
-      message="No products found!"
-      isIcon
-      icon="heart-circle-outline"
-      onPress={goHome || (() => {})}
-    />
-  );
-
   return (
     <FlatList
       testID="flat-list"
@@ -61,7 +48,6 @@ function CustomFlatList<T>({
       onRefresh={onRefresh}
       refreshing={refreshing}
       contentContainerStyle={contentContainerStyle}
-      ListEmptyComponent={emptyState}
       {...restProps}
     />
   );

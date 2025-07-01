@@ -48,6 +48,12 @@ export default function LoginScreen() {
     }
   };
 
+  const isFormValid = email.trim() !== '' && password.trim() !== '';
+
+  const handleSignUp = () => {
+    navigation.navigate('SignUp');
+  };
+
   return (
     <Container behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <InnerContainer>
@@ -74,13 +80,13 @@ export default function LoginScreen() {
         />
 
         <StyledButton
-          disabled={isLoading}
+          disabled={!isFormValid || isLoading}
           onPress={handleLogin}
           title={isLoading ? 'Logging in...' : 'Login'}
           type="primary"
         />
 
-        <LinkContainer onPress={() => navigation.navigate('SignUp')}>
+        <LinkContainer onPress={handleSignUp}>
           <LinkText>
             Don’t have an account?
             <Link>Sign up</Link>

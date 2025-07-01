@@ -21,6 +21,7 @@ export type CartStackParamList = {
   CartScreen: object;
   Products: object;
   ProductDetails: { id: number };
+  Checkout: object;
 };
 
 export type HomeStackParamList = {

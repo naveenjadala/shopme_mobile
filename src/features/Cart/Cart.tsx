@@ -2,7 +2,7 @@ import {
   CompositeNavigationProp,
   useNavigation,
 } from '@react-navigation/native';
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import { BottomTabParamList, CartStackParamList } from '@navigation/types';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
@@ -33,8 +33,19 @@ const Cart = () => {
 
   const { data: cartData } = useGetCartItemsQuery();
 
-  const productDetails = (itemId: number) => {
-    navigation.navigate({ name: 'ProductDetails', params: { id: itemId } });
+  const productDetails = useCallback(
+    (itemId: number) => {
+      navigation.navigate({ name: 'ProductDetails', params: { id: itemId } });
+    },
+    [navigation],
+  );
+
+  const goToCheckout = () => {
+    navigation.navigate({ name: 'Checkout', params: {} });
+  };
+
+  const goToHome = () => {
+    navigation.navigate({ name: 'Home', params: {} });
   };
 
   if (!cartData) {
@@ -43,7 +54,7 @@ const Cart = () => {
         message="You have no products yet in your cart"
         isIcon
         icon="cart-outline"
-        onPress={() => navigation.navigate({ name: 'Home', params: {} })}
+        onPress={goToHome}
       />
     );
   }
@@ -55,7 +66,7 @@ const Cart = () => {
       <Button
         title="Checkout"
         type="primary"
-        onPress={() => navigation.navigate({ name: 'Checkout' })}
+        onPress={goToCheckout}
         style={{ margin: 15 }}
       />
     </Container>
@@ -63,9 +74,3 @@ const Cart = () => {
 };
 
 export default Cart;
-
-// const Container = styled.View`
-//   flex: 1;
-//   background-color: ${({ theme }) => theme.colors.background};
-//   margin-bottom: 8px;
-// `;

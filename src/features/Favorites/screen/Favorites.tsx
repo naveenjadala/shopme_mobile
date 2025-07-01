@@ -6,6 +6,7 @@ import {
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback } from 'react';
 
+import EmptyListState from '@components/emptyState/EmptyListState';
 import CustomFlatList from '@components/flatList/CustomFlatList';
 import Header from '@components/Headers/Header';
 import { BottomTabParamList, HomeStackParamList } from '@navigation/types';
@@ -34,7 +35,7 @@ NativeStackNavigationProp<HomeStackParamList>
 const Favorites = () => {
   const navigation = useNavigation<NavigationProp>();
 
-  const { data: favData } = useGetFavoritesQuery();
+  const { data: favData, isLoading } = useGetFavoritesQuery();
 
   const [removeFavorite] = useRemoveFavoriteMutation();
 
@@ -66,9 +67,9 @@ const Favorites = () => {
 
   const keyExtractor = useCallback((item: Product) => item.id.toString(), []);
 
-  const goHome = () => {
+  const goHome = useCallback(() => {
     navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
-  };
+  }, [navigation]);
 
   return (
     <Container>
@@ -80,8 +81,17 @@ const Favorites = () => {
         numColumns={2}
         showsVerticalScrollIndicator={false}
         onEndReachedThreshold={0.5}
-        goHome={goHome}
         contentContainerStyle={{ flexGrow: 1 }}
+        ListEmptyComponent={
+          isLoading ? null : (
+            <EmptyListState
+              message="No products found!"
+              isIcon
+              icon="heart-circle-outline"
+              onPress={goHome}
+            />
+          )
+        }
       />
     </Container>
   );

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { FlatList } from 'react-native';
 import styled from 'styled-components/native';
+
 import { CartItem, CartListProps } from '../types';
 
 const Container = styled.View`
@@ -106,8 +107,8 @@ const TotalValue = styled.Text`
  * @prop {CartItem[]} cateData - An array of cart items.
  * @returns {React.ReactElement}
  */
-const CartList = ({ productDetails, cateData }: CartListProps) => {
-  const deliveryFee = 0;
+const CartList = memo(({ productDetails, cateData }: CartListProps) => {
+  const deliveryFee: number = 0;
   const { subtotal, total } = React.useMemo(() => {
     const rawSubtotal = cateData?.reduce((sum, item) => sum + parseFloat(item.price), 0) ?? 0;
 
@@ -143,10 +144,10 @@ const CartList = ({ productDetails, cateData }: CartListProps) => {
             </PriceText>
           </ItemFooter>
         </ItemWrapper>
-        <Divider isLast={index === cateData.length - 1} />
+        {/* <Divider isLast={index === lastIndex} /> */}
       </React.Fragment>
     ),
-    [productDetails, cateData],
+    [productDetails],
   );
 
   const ListFooter = React.useMemo(
@@ -163,7 +164,7 @@ const CartList = ({ productDetails, cateData }: CartListProps) => {
         <SummaryRow>
           <SummaryLabel>Delivery</SummaryLabel>
           <SummaryValue>
-            {parseFloat(deliveryFee) > 0 ? `$${deliveryFee}` : 'Free'}
+            {deliveryFee > 0 ? `$${deliveryFee.toString()}` : 'Free'}
           </SummaryValue>
         </SummaryRow>
         <SummaryRow>
@@ -187,10 +188,11 @@ const CartList = ({ productDetails, cateData }: CartListProps) => {
         keyExtractor={item => `${item.id}-${item.productId}`}
         initialNumToRender={5}
         maxToRenderPerBatch={5}
+        ItemSeparatorComponent={Divider}
         windowSize={5}
       />
     </Container>
   );
-};
+});
 
 export default CartList;
