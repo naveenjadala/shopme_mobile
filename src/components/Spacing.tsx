@@ -13,7 +13,7 @@ interface SpacingProps extends ViewProps {
 }
 
 const Spacing = ({ height = 0, width = 0, ...rest }: SpacingProps) => (
-  <Spacer height={height} width={width} {...rest} />
+  <Spacer testID="spacing" height={height} width={width} {...rest} />
 );
 
 export default Spacing;

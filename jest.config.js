@@ -28,7 +28,7 @@ module.exports = {
      'src/**/*.{js,jsx,ts,tsx}',
      '!src/**/*.d.ts',
      '!src/**/index.{js,jsx,ts,tsx}', // ignore index files
-     '!src/**/*.stories.{js,jsx,ts,tsx}', // ignore storybook files
+     '!src/**/*.test.tsx', // ignore storybook files
      '!src/**/types.ts', // ignore type files
      '!src/constants/**', // ignore constants
      '!src/assets/**', // ignore assets

@@ -40,7 +40,7 @@ interface EmptyListProps {
 const EmptyListState = memo(
   ({ title, message, isIcon, icon, onPress, style }: EmptyListProps) => (
     <Container style={style}>
-      {isIcon && <Icon name={icon} size={60} />}
+      {isIcon && <Icon testID="icon" name={icon} size={60} />}
       {title && <Title>{title}</Title>}
       <Message>{message}</Message>
       <ButtonContainer
@@ -49,7 +49,7 @@ const EmptyListState = memo(
         type="primary"
         style={{
           position: 'absolute',
-          bottom: 0,
+          bottom: 10,
           width: '90%',
           height: 50,
         }}

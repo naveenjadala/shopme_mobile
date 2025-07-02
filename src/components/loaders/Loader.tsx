@@ -24,7 +24,7 @@ type LoaderProps = {
  */
 const Loader: React.FC<LoaderProps> = ({ size = 'large', color = '#000' }) => (
   <Container>
-    <ActivityIndicator size={size} color={color} />
+    <ActivityIndicator testID="loader" size={size} color={color} />
   </Container>
 );
 

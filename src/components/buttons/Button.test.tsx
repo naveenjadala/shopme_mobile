@@ -5,14 +5,13 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { lightTheme } from '../../theme';
 import Button from './Button';
 
-const baseProps = {
-  title: 'test',
-  onPress: jest.fn(),
-};
-
 const MockIcon = () => <Icon name="chevron-back" testID="icon" />;
 
 describe('Button', () => {
+  const baseProps = {
+    title: 'test',
+    onPress: jest.fn(),
+  };
   it('should render label', () => {
     render(<Button {...baseProps} />);
     expect(screen.getByText('test')).toBeTruthy();

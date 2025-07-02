@@ -21,7 +21,6 @@ export default class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo): void {
-    // Log error conditionally
     if (__DEV__) {
       console.error('Error caught in ErrorBoundary:', error, info);
     }
