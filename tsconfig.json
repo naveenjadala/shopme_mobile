@@ -28,6 +28,9 @@
       "@pages/*": ["pages/*"],
       "@assets/*": ["assets/*"],
       "@navigation/*": ["navigation/*"],
+      "@shared/*": ["shared/*"],
+      "@features/*": ["features/*"],
+      "@services/*": ["services/*"],
       "@src/*": ["src/*"]
     },
     "noEmit": true

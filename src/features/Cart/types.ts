@@ -1,12 +1,20 @@
+import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
+
 export type CartItem = {
-  id: number;
+  category: string;
+  id?: string;
+  productId: string;
   title: string;
   image: string;
-  price: string;
-  color: string;
-  size: string;
-  category: string;
-  productId: number;
+  price: number;
+  quantity: number;
+  size?: string;
+  color?: string;
+  createdAt?:
+  | string
+  | { _seconds: number; _nanoseconds: number }
+  | FirebaseFirestoreTypes.FieldValue
+  | undefined;
 };
 
 export type CartListProps = {

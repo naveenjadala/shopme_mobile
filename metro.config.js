@@ -21,6 +21,7 @@ const config = {
         "@pages": path.resolve(__dirname, "src/pages"),
         "@assets": path.resolve(__dirname, "src/assets"),
         "@navigation": path.resolve(__dirname, "src/navigation"),
+        "@shared": path.resolve(__dirname, "src/shared"),
         "@src": path.resolve(__dirname, "src")
       },
     },

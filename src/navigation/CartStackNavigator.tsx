@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Checkout from 'features/Checkout/Checkout';
 import React from 'react';
+import Checkout from '../features/Checkout/Checkout';
 
 import Cart from '../features/Cart/Cart';
 import ProductDetails from '../features/Products/screens/ProductDetails';

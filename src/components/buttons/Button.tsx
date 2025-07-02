@@ -29,7 +29,7 @@ const ButtonContainer = styled.TouchableOpacity<ButtonStyleProps>`
         return '#111';
     }
   }};
-  border: ${({ type }) => (type === 'secondary' ? '1px solid #111' : '0px')};
+  border: ${({ type, theme }) => (type === 'secondary' ? `1px solid ${theme.colors.border}` : '0px')};
 `;
 
 const ButtonText = styled.Text<ButtonStyleProps>`

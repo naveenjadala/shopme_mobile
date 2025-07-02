@@ -1,4 +1,4 @@
-import auth from '@react-native-firebase/auth';
+import { getAuth } from '@react-native-firebase/auth';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { baseApi } from '../../services';
 
@@ -14,11 +14,11 @@ const formatError = (error: unknown): FetchBaseQueryError => {
 };
 
 const authApi = baseApi.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     logout: builder.mutation<{ success: boolean }, void>({
       async queryFn() {
         try {
-          await auth().signOut();
+          await getAuth().signOut();
           return { data: { success: true } };
         } catch (error) {
           return { error: formatError(error) };

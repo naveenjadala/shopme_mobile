@@ -38,7 +38,7 @@ const ItemTitle = styled.Text`
 
 const ItemDetail = styled.Text`
   font-size: ${({ theme }) => theme.fontSize.base}px;
-  color: ${({ theme }) => theme.colors.textSecondary};
+  color: ${({ theme }) => theme.colors.textPrimary};
   margin-bottom: 2px;
 `;
 
@@ -51,7 +51,7 @@ const ItemFooter = styled.View`
 
 const QtyText = styled.Text`
   font-size: ${({ theme }) => theme.fontSize.base}px;
-  color: ${({ theme }) => theme.colors.textSecondary};
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 const PriceText = styled.Text`
@@ -78,12 +78,12 @@ const SummaryRow = styled.View`
 
 const SummaryLabel = styled.Text`
   font-size: ${({ theme }) => theme.fontSize.base}px;
-  color: ${({ theme }) => theme.colors.textSecondary};
+  color: ${({ theme }) => theme.colors.textPrimary};
 `;
 
 const SummaryValue = styled.Text`
   font-size: ${({ theme }) => theme.fontSize.base}px;
-  color: ${({ theme }) => theme.colors.textSecondary};
+  color: ${({ theme }) => theme.colors.textPrimary};
 `;
 
 const TotalLabel = styled.Text`
@@ -110,7 +110,7 @@ const TotalValue = styled.Text`
 const CartList = memo(({ productDetails, cateData }: CartListProps) => {
   const deliveryFee: number = 0;
   const { subtotal, total } = React.useMemo(() => {
-    const rawSubtotal = cateData?.reduce((sum, item) => sum + parseFloat(item.price), 0) ?? 0;
+    const rawSubtotal = cateData?.reduce((sum, item) => sum + item.price * item.quantity, 0) ?? 0;
 
     const rawDeliveryFee = deliveryFee ?? 0;
 
@@ -121,10 +121,12 @@ const CartList = memo(({ productDetails, cateData }: CartListProps) => {
     };
   }, [cateData, deliveryFee]);
 
+  console.log('cateData', cateData);
+
   const renderItem = React.useCallback(
     ({ item, index }: { item: CartItem; index: number }) => (
       <React.Fragment key={`${item.id}-${index}`}>
-        <ItemWrapper onPress={() => productDetails(item.productId)}>
+        <ItemWrapper onPress={() => productDetails(Number(item.productId))}>
           <ItemContainer>
             <ItemImage source={{ uri: item.image }} resizeMode="cover" />
             <ItemContent>
@@ -138,6 +140,7 @@ const CartList = memo(({ productDetails, cateData }: CartListProps) => {
           </ItemContainer>
           <ItemFooter>
             <QtyText>Qty ^</QtyText>
+            <QtyText>{item.quantity}</QtyText>
             <PriceText>
               $
               {item.price}

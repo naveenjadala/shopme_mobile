@@ -17,6 +17,8 @@ module.exports = {
           "@pages": "./src/pages",
           "@assets": "./src/assets",
           "@navigation": "./src/navigation",
+          "@shared": "./src/shared",
+          "@features": "./src/features",
           "@src": "./src"
         }
       }

@@ -7,11 +7,12 @@ import React, { useCallback } from 'react';
 import { BottomTabParamList, CartStackParamList } from '@navigation/types';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+import Button from '@components/buttons/Button';
+import EmptyListState from '@components/emptyState/EmptyListState';
+import Header from '@components/Headers/Header';
+import { useGetCartItemsQuery } from '@shared/services/cartApi';
 import { Container } from '@theme/globalStyles';
-import Button from '../../components/buttons/Button';
-import EmptyListState from '../../components/emptyState/EmptyListState';
-import Header from '../../components/Headers/Header';
-import { useGetCartItemsQuery } from './cartApi';
 import CartList from './components/CartList';
 
 type NavigationProp = CompositeNavigationProp<

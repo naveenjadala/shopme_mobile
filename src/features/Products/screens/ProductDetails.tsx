@@ -5,6 +5,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
 
 import useFavorites from '@hooks/useFavorites';
+import { serverTimestamp } from '@react-native-firebase/firestore';
+import { useAddToCartMutation } from '@shared/services/cartApi';
+import { useTheme } from '@theme/ThemeContext';
 import Button from '../../../components/buttons/Button';
 import Header from '../../../components/Headers/Header';
 import Spacing from '../../../components/Spacing';
@@ -30,25 +33,31 @@ const Content = styled.View`
 `;
 
 const Title = styled.Text`
-  font-size: 20px;
+  font-size: ${({ theme }) => theme.fontSize.lg}px;
   font-weight: 500;
+  color: ${({ theme }) => theme.colors.textPrimary};
 `;
 
 const Category = styled.Text`
   margin-vertical: 2px;
+  color: ${({ theme }) => theme.colors.textPrimary};
 `;
 
-const Description = styled.Text``;
+const Description = styled.Text`
+  color: ${({ theme }) => theme.colors.textPrimary};
+`;
 
 const Price = styled.Text`
   margin-vertical: 10px;
   font-size: 16px;
   font-weight: 500;
+  color: ${({ theme }) => theme.colors.textPrimary};
 `;
 
 const SizeTitle = styled.Text`
   font-size: 14px;
   font-weight: 500;
+  color: ${({ theme }) => theme.colors.textPrimary};
 `;
 
 const SizeBox = styled.View`
@@ -75,6 +84,7 @@ const Section = styled.View`
  *
  */
 const ProductDetails = () => {
+  const { theme } = useTheme();
   const navigation = useNavigation();
   const route = useRoute<
   RouteProp<{ ProductDetail: ProductDetailRouteParams }, 'ProductDetail'>
@@ -86,6 +96,7 @@ const ProductDetails = () => {
   const { data: product } = useGetProductByIdQuery({
     productId,
   });
+  const [addToCart] = useAddToCartMutation();
 
   const [addToFavorites] = useAddToFavoritesMutation();
   const [removeFavorite] = useRemoveFavoriteMutation();
@@ -93,7 +104,7 @@ const ProductDetails = () => {
   const renderSizeItem: ListRenderItem<string> = useCallback(
     ({ item }) => (
       <SizeBox>
-        <Title style={{ fontSize: 14 }}>{item}</Title>
+        <Title>{item}</Title>
       </SizeBox>
     ),
     [],
@@ -116,6 +127,22 @@ const ProductDetails = () => {
       refetch();
     }, 200);
   }, [addToFavorites, isFav, removeFav, product, refetch]);
+
+  const handleAddToCart = useCallback(() => {
+    if (!product) return;
+    const item = {
+      id: product.id.toString(),
+      productId: product.id.toString(),
+      title: product.title,
+      image: product.images[0],
+      price: product.price,
+      quantity: 1,
+      size: product.sizes[0],
+      color: product.colors[0],
+      createdAt: serverTimestamp(),
+    };
+    addToCart(item);
+  }, [addToCart, product]);
 
   return (
     <Container>
@@ -151,16 +178,24 @@ const ProductDetails = () => {
           </Section>
 
           <Spacing height={20} />
-          <Button title="Add to Cart" type="rounded" onPress={() => {}} />
+          <Button
+            title="Add to Cart"
+            type="primary"
+            onPress={handleAddToCart}
+          />
           <Spacing height={10} />
           <Button
             title="Wishlist"
             type="secondary"
             icon={
               isFav ? (
-                <Icon name="heart" size={20} color="#111" />
+                <Icon name="heart" size={20} color={theme.colors.primary} />
               ) : (
-                <Icon name="heart-outline" size={20} color="#111" />
+                <Icon
+                  name="heart-outline"
+                  size={20}
+                  color={theme.colors.primary}
+                />
               )
             }
             onPress={updateFav}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, StatusBar } from 'react-native';
+import { StatusBar } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 import { useTheme } from '../theme/ThemeContext';
@@ -16,15 +16,13 @@ const SafeAreaViewStyled = styled(SafeAreaView)`
  * current theme's background color and sets the bar style to "light-content".
  */
 const SafeView = ({ children }: { children: React.ReactNode }) => {
-  const { theme } = useTheme();
+  const { theme, isDarkMode } = useTheme();
   return (
     <SafeAreaProvider>
       <SafeAreaViewStyled edges={['top']}>
         <StatusBar
-          backgroundColor={
-            Platform.OS === 'ios' ? theme.colors.background : undefined
-          }
-          barStyle="light-content"
+          backgroundColor={theme.colors.background}
+          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         />
         {children}
       </SafeAreaViewStyled>
